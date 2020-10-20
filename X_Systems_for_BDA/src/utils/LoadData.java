@@ -14,14 +14,21 @@ public class LoadData {
 	
 	private ArrayList records = new ArrayList<>();
 	
-	private Hashtable EmployeNB = new Hashtable();
-	private Hashtable Age = new Hashtable();
-	private Hashtable Departement  = new Hashtable();
+	private Hashtable<Integer,String> EmployeNB = new Hashtable<>();
+	private Hashtable<Integer,String> Age = new Hashtable<>();
+	private Hashtable<Integer,String> Departement  = new Hashtable<>();
+	
+	private Hashtable<String,Hashtable<Integer,String>> Columns = new Hashtable<>(); 
 	
 	
 	
 	public LoadData(String fileName) {
 		this.FileName = fileName; 
+		
+		Columns.put("EmployeId", EmployeNB); 
+		Columns.put("Age", Age); 
+		Columns.put("Departement", Departement); 
+		
 	}
 	
 	
@@ -40,17 +47,13 @@ public class LoadData {
 	        
 	        records.add(Arrays.asList(values));
 	    }
-	    Enumeration e = Departement.elements();
-	    while(e.hasMoreElements())
-	        System.out.println(e.nextElement());
-	    
+	    //Enumeration e = Departement.elements();
+	    //while(e.hasMoreElements())
+	        //System.out.println(e.nextElement());
 	    
 	    
 	    //Exemple de list retourné par la team SELECTION 
-	    int [] tab = {3,5,6,8};
-	    for (int j : tab) {
-	    	System.out.println(Age.get(j)+","+Departement.get(j));
-	    }
+	   
 	    //Projection sur Age et dépatement 
 	 	}catch(IOException ex) {
 	 		ex.printStackTrace();
@@ -58,11 +61,32 @@ public class LoadData {
 	
 	}
 	
+	public void Project( ArrayList<Integer> id, String[] columns) {
+		
+		for(int i : id) {
+			for(String j : columns) {
+				System.out.println(((Hashtable)this.Columns.get(j)).get(i));
+			}
+			
+		}
+		
+		
+		
+	}
+	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		LoadData RData = new LoadData("src/Data/dataset.csv");
+		
 		RData.read();
-		    
+		ArrayList<Integer> tab = new ArrayList<Integer>();
+		tab.add(1);
+		tab.add(3);
+		tab.add(4);
+		tab.add(5);
+		String[] col = {"Age","Departement"};
+		RData.Project(tab, col);
+		
 		}
 	
 	
