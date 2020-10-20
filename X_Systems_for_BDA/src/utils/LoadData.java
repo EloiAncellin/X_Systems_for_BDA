@@ -11,7 +11,9 @@ import java.util.Hashtable;
 public class LoadData {
 	
 	private String FileName; 
+	
 	private ArrayList records = new ArrayList<>();
+	
 	private Hashtable EmployeNB = new Hashtable();
 	private Hashtable Age = new Hashtable();
 	private Hashtable Departement  = new Hashtable();
@@ -30,6 +32,7 @@ public class LoadData {
 	    int i =0 ;
 	    while ((line = br.readLine()) != null) {
 	        String[] values = line.split(",");
+	        
 	        EmployeNB.put(i, values[4]);
 	        Age.put(i, values[0]);
 	        Departement.put(i, values[2]);
