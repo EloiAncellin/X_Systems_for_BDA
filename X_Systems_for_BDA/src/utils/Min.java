@@ -1,5 +1,5 @@
 public class Min{
-    int[] data;
+    int[] data; /*Cette liste doit être triée*/
     int lenData;
 
     public int min(){

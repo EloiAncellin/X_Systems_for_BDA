@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class MeanMultiThread{
     int[] data;
     int lenData;
