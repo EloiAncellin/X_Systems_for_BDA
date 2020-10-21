@@ -25,7 +25,7 @@ public class Mean{
         int rd;
         float moyenne = 0;
         for (int i = 0; i<nbValeurObservee; i++){
-            rd = NextInt(lenData);
+            rd = random.NextInt(lenData);
             moyenne+=data[rd];
         }
         double moy = (double) moyenne/nbValeurObservee;
