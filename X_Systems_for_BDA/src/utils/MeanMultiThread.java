@@ -34,4 +34,21 @@ public class MeanMultiThread{
         double moy = (double)mean/n;
         return(moy);
     }
+
+    double meanStochastic(){
+        int moyenne = 0;
+        int nbValeurObservee = lenData/10;
+        int first = part * (last/4);
+        last = (part+1) * (last/4)-1;
+        int n = last - first;
+        int[] sub = subarray(data, first , last);
+        Random random = new Random();
+        int rd;
+        for (int i = 0; i<nbValeurObservee; i++){
+            rd = random.NextInt(lenData);
+            moyenne+=data[rd];
+        }
+        double moy = (double) moyenne/nbValeurObservee;
+        return(moy);
+    }
 }
