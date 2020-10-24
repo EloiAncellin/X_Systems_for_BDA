@@ -58,34 +58,56 @@ public class LoadData {
 	
 	}
 	
-	public void Project( ArrayList<Integer> id, String[] columns) {
+	public void  Project( ArrayList<Integer> id, String[] columns, Boolean Distinct) {
 		
-		for(String i : columns) {
-			System.out.print(i + " | ") ;
-		}
-		System.out.println();
-		for(int i : id) {
+		if( Distinct == true) {
+			int size = id.size();
+			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
+			
 			for(String j : columns) {
-				System.out.print(((Hashtable)this.Columns.get(j)).get(i)+ " | ");
+				BasicHashSet elements = new BasicHashSet(size);  
+				for(int i : id) {
+					elements.add( ((Hashtable)this.Columns.get(j)).get(i)  );
+				}
+				OutputsColumnsElements.add(elements);
+				System.out.println();
+				
+			}
+			
+			for (int k=0 ; k < OutputsColumnsElements.size();k++) {
+				Iterator it =  OutputsColumnsElements.get(k).iterator();
+				while(it.hasNext()) {
+					System.out.println(it.next());
+				}
+			}
+			
+		}
+		else {
+			
+			for(String i : columns) {
+				System.out.print(i + " | ") ;
 			}
 			System.out.println();
+			for(int i : id) {
+				for(String j : columns) {
+					System.out.print(((Hashtable)this.Columns.get(j)).get(i)+ " | ");
+				}
+				System.out.println();
+				
+			}
 			
 		}
+		
+		
+		
+		
 		
 		
 		
 	}
 	
 	
-	public void DropsDuplicates(ArrayList<Integer> id) {
-		
-		ArrayList<Integer> newList = new ArrayList<>();
-		
-		for(int i:id) {
-			
-		}
-		
-	}
+	
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
@@ -101,7 +123,7 @@ public class LoadData {
 		
 		
 		String[] col = {"Age","Departement"};
-		RData.Project(tab, col);
+		RData.Project(tab, col,true);
 	
 		}
 	
