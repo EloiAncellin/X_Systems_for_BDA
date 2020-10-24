@@ -5,8 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 public class LoadData {
 	
@@ -51,10 +52,6 @@ public class LoadData {
 	    //while(e.hasMoreElements())
 	        //System.out.println(e.nextElement());
 	    
-	    
-	    //Exemple de list retourné par la team SELECTION 
-	   
-	    //Projection sur Age et dépatement 
 	 	}catch(IOException ex) {
 	 		ex.printStackTrace();
 	 	}
@@ -63,14 +60,30 @@ public class LoadData {
 	
 	public void Project( ArrayList<Integer> id, String[] columns) {
 		
+		for(String i : columns) {
+			System.out.print(i + " | ") ;
+		}
+		System.out.println();
 		for(int i : id) {
 			for(String j : columns) {
-				System.out.println(((Hashtable)this.Columns.get(j)).get(i));
+				System.out.print(((Hashtable)this.Columns.get(j)).get(i)+ " | ");
 			}
+			System.out.println();
 			
 		}
 		
 		
+		
+	}
+	
+	
+	public void DropsDuplicates(ArrayList<Integer> id) {
+		
+		ArrayList<Integer> newList = new ArrayList<>();
+		
+		for(int i:id) {
+			
+		}
 		
 	}
 	
@@ -82,11 +95,14 @@ public class LoadData {
 		ArrayList<Integer> tab = new ArrayList<Integer>();
 		tab.add(1);
 		tab.add(3);
-		tab.add(4);
 		tab.add(5);
+		tab.add(5);
+		
+		
+		
 		String[] col = {"Age","Departement"};
 		RData.Project(tab, col);
-		
+	
 		}
 	
 	
