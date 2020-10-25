@@ -1,7 +1,7 @@
 package utils;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 
 public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
@@ -9,7 +9,7 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	int last;
 	int[] keys;
 	int part;
-	List<Integer> results;
+	ArrayList<Integer> results;
 	
 	public MilanMultiKeyBinarySearchMultiThread(int[][] data, int[] keys, int last,  int part) {
 		this.data = data;
@@ -35,11 +35,11 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 		return Arrays.copyOfRange(keys, beg, end + 1);
 	}
 
-	public List<Integer> getResults() {
+	public ArrayList<Integer> getResults() {
 		return results;
 	}
 	
-	public void setResults(List<Integer> results) {
+	public void setResults(ArrayList<Integer> results) {
 		this.results = results;
 	}
 
