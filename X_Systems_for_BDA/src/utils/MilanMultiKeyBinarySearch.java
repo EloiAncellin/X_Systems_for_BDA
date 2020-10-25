@@ -1,11 +1,11 @@
 package utils;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class MilanMultiKeyBinarySearch {
 
-	List<Integer> results;
+	ArrayList<Integer> results;
 	public MilanMultiKeyBinarySearch() {
 		results = new ArrayList<>();
 	}
@@ -43,7 +43,7 @@ public class MilanMultiKeyBinarySearch {
 		
 	}
 	
-	public List<Integer> getResults() {
+	public ArrayList<Integer> getResults() {
 		return results;
 	}
 }
