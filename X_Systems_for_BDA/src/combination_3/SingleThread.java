@@ -1,8 +1,8 @@
-package combination_1;
+package combination_3;
 
 import java.util.ArrayList;
 
-import utils.BinarySearch;
+import utils.MilanMultiKeyBinarySearch;
 import utils.LoadData;
 
 public class SingleThread {
@@ -23,7 +23,7 @@ public class SingleThread {
 		this.loadData = new LoadData(filename);
 	}
 
-	// SELECTION : Multi Key Binary Search
+	// SELECTION : Milan Multi Key Binary Search
 	// PROJECTION :
 	// AGGREGATION :
 	public void start_combination() {
@@ -33,9 +33,9 @@ public class SingleThread {
 		// Read customer price
 
 		// this.customerIdPrice =
-		for (int i = 0; i < keys.length; i++) {
-			addSelection(BinarySearch.binarySearch(customerIdPrice, 0, customerIdPrice.length - 1, keys[i]));
-		}
+		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
+		mmkbs.milanMultiKeyBinarySearch(customerIdPrice, 0, customerIdPrice.length - 1, keys, 0, keys.length - 1);
+		setSelection(mmkbs.getResults());
 
 		// ***** PROJECTION ***** //
 
@@ -44,6 +44,10 @@ public class SingleThread {
 
 	public void addSelection(int result) {
 		this.selection.add(result);
+	}
+
+	public void setSelection(ArrayList<Integer> results) {
+		this.selection = results;
 	}
 
 	public void setCustomerIdPrice(int[][] customerIdPrice) {

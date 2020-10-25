@@ -22,7 +22,11 @@ public class SingleThread {
 		this.keys = keys;
 		this.loadData = new LoadData(filename);
 	}
+	
 
+	// SELECTION : Milan Multi Key Binary Search
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination() {
 
 		// ***** SELECTION ***** //

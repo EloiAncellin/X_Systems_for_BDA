@@ -24,6 +24,9 @@ public class MultiThread {
 		this.loadData = new LoadData(filename);
 	}
 
+	// SELECTION : Multi Key Binary Search
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
 
 		// ***** SELECTION ***** //
