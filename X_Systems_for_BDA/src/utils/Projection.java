@@ -1,3 +1,4 @@
+package utils;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -8,16 +9,18 @@ import utils.LoadData;
 public class Projection {
 	
 	private Hashtable<String,Hashtable<Integer,?>> Columns = new Hashtable<>(); 
+	private Hashtable<String,BasicHashSet> HashSetColumns = new Hashtable<String,BasicHashSet>();
 	
 	
 	public Projection(Hashtable<String,Hashtable<Integer,?>> cl) {
 		
 		this.Columns = cl;
 		
+		
 	}
 	
 	
-	public void  Project( ArrayList<Integer> id, String[] columns, Boolean distinct) {
+	public synchronized void  Project( ArrayList<Integer> id, String[] columns, Boolean distinct) {
 		
 		Hashtable<Integer,Integer> hid = new Hashtable<Integer,Integer>();
 		
@@ -39,13 +42,13 @@ public class Projection {
 				System.out.println();
 				
 			}
-			
+			/*
 			for (int k=0 ; k < OutputsColumnsElements.size();k++) {
 				Iterator it =  OutputsColumnsElements.get(k).iterator();
 				while(it.hasNext()) {
 					System.out.println(it.next());
 				}
-			}
+			}*/
 			
 			
 			
@@ -73,6 +76,7 @@ public class Projection {
 		
 		
 	}
+	
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub

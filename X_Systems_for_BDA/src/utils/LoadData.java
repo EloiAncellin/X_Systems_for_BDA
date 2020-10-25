@@ -57,7 +57,7 @@ public class LoadData {
 	        float pdprice = Float.parseFloat(values[5]);
 	        int purch = Integer.parseInt(values[6]);
 	        
-	        CustomerId.put(id, id);
+	        CustomerId.put(i, id);
 	        CustomerName.put(id, values[1]);
 	        CustomerAge.put(id, age);
 	        ProductId.put(id, pdid);
