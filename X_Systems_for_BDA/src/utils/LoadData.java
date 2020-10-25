@@ -18,6 +18,8 @@ public class LoadData {
 	private Hashtable<Integer,String> EmployeNB = new Hashtable<>();
 	private Hashtable<Integer,String> Age = new Hashtable<>();
 	private Hashtable<Integer,String> Departement  = new Hashtable<>();
+	private Hashtable<Integer,Integer> CustomerId = new Hashtable<>(); 
+	
 	
 	private Hashtable<String,Hashtable<Integer,String>> Columns = new Hashtable<>(); 
 	
@@ -58,16 +60,23 @@ public class LoadData {
 	
 	}
 	
-	public void  Project( ArrayList<Integer> id, String[] columns, Boolean Distinct) {
+	public void  Project( ArrayList<Integer> id, String[] columns, Boolean distinct) {
 		
-		if( Distinct == true) {
+		Hashtable<Integer,Integer> hid = new Hashtable<Integer,Integer>();
+		
+		if( distinct == true) {
+			
 			int size = id.size();
 			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
 			
 			for(String j : columns) {
 				BasicHashSet elements = new BasicHashSet(size);  
-				for(int i : id) {
+				for(int i = 0; i<size; i++) {
 					elements.add( ((Hashtable)this.Columns.get(j)).get(i)  );
+					
+					/*if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
+						id.remove(i);
+					}*/ 
 				}
 				OutputsColumnsElements.add(elements);
 				System.out.println();
@@ -80,6 +89,8 @@ public class LoadData {
 					System.out.println(it.next());
 				}
 			}
+			
+			
 			
 		}
 		else {
