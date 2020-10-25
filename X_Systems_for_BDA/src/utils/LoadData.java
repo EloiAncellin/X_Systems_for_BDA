@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -15,22 +15,30 @@ public class LoadData {
 	
 	private ArrayList records = new ArrayList<>();
 	
-	private Hashtable<Integer,String> EmployeNB = new Hashtable<>();
-	private Hashtable<Integer,String> Age = new Hashtable<>();
-	private Hashtable<Integer,String> Departement  = new Hashtable<>();
+	private Hashtable<Integer,String> CustomerName = new Hashtable<>();
+	private Hashtable<Integer,Integer> CustomerAge = new Hashtable<>();
+	private Hashtable<Integer,Integer> ProductId  = new Hashtable<>();
 	private Hashtable<Integer,Integer> CustomerId = new Hashtable<>(); 
+	private Hashtable<Integer,String> ProductName = new Hashtable<>();
+	private Hashtable<Integer,Float> ProductPrice = new Hashtable<>();
+	private Hashtable<Integer,Integer> Purchaseld = new Hashtable<>(); 
 	
 	
-	private Hashtable<String,Hashtable<Integer,String>> Columns = new Hashtable<>(); 
+	private Hashtable<String,Hashtable<Integer,?>> Columns = new Hashtable<>(); 
 	
 	
 	
 	public LoadData(String fileName) {
 		this.FileName = fileName; 
 		
-		Columns.put("EmployeId", EmployeNB); 
-		Columns.put("Age", Age); 
-		Columns.put("Departement", Departement); 
+		Columns.put("CustomerName", CustomerName); 
+		Columns.put("CustomerAge", CustomerAge ); 
+		Columns.put("ProductId", ProductId);
+		Columns.put("CustomerId", CustomerId);
+		Columns.put("PoductName", ProductName);
+		Columns.put("ProductId", ProductPrice);
+		Columns.put("ProductId", Purchaseld);
+		
 		
 	}
 	
@@ -41,18 +49,33 @@ public class LoadData {
 	    String line;
 	    int i =0 ;
 	    while ((line = br.readLine()) != null) {
-	        String[] values = line.split(",");
+	    	if(i>=1) {
+	    	String[] values = line.split(",");
+	        int id = Integer.parseInt(values[0]);
+	        int age = Integer.parseInt(values[2]);
+	        int pdid = Integer.parseInt(values[3]);
+	        float pdprice = Float.parseFloat(values[5]);
+	        int purch = Integer.parseInt(values[6]);
 	        
-	        EmployeNB.put(i, values[4]);
-	        Age.put(i, values[0]);
-	        Departement.put(i, values[2]);
-	        i++;
+	        CustomerId.put(id, id);
+	        CustomerName.put(id, values[1]);
+	        CustomerAge.put(id, age);
+	        ProductId.put(id, pdid);
+	        ProductName.put(id, values[4]);
+	        ProductPrice.put(id, pdprice);
+	        Purchaseld.put(id, purch); 
+	      
 	        
 	        records.add(Arrays.asList(values));
+	    	}
+	          i++;
 	    }
-	    //Enumeration e = Departement.elements();
-	    //while(e.hasMoreElements())
-	        //System.out.println(e.nextElement());
+	    
+	    /*
+	    Enumeration e = CustomerName.elements();
+	    while(e.hasMoreElements())
+	        System.out.println(e.nextElement());
+	    */
 	    
 	 	}catch(IOException ex) {
 	 		ex.printStackTrace();
@@ -71,7 +94,7 @@ public class LoadData {
 			
 			for(String j : columns) {
 				BasicHashSet elements = new BasicHashSet(size);  
-				for(int i = 0; i<size; i++) {
+				for(int i : id) {
 					elements.add( ((Hashtable)this.Columns.get(j)).get(i)  );
 					
 					/*if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
@@ -117,23 +140,25 @@ public class LoadData {
 		
 	}
 	
+	public Hashtable<String,Hashtable<Integer,?>> GetColumns(){
+		return this.Columns; 
+	}
+	
 	
 	
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		LoadData RData = new LoadData("src/Data/dataset.csv");
+		LoadData RData = new LoadData("src/dataset/dataset_100.csv");
 		
 		RData.read();
 		ArrayList<Integer> tab = new ArrayList<Integer>();
-		tab.add(1);
-		tab.add(3);
-		tab.add(5);
-		tab.add(5);
+		
+		Hashtable<String,Hashtable<Integer,?>> cl = RData.GetColumns();
+		tab = new ArrayList(cl.get("CustomerId").values());
 		
 		
-		
-		String[] col = {"Age","Departement"};
+		String[] col = {"CustomerAge"};
 		RData.Project(tab, col,true);
 	
 		}
