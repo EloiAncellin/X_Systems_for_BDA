@@ -1,11 +1,13 @@
 import java.util.Random;
+import Mean;
 
-public class MeanMultiThread{
+public class MeanMultiThread implements Runnable{
     int[] data;
     int lenData;
     int last;
     int part;
     int nbPart;
+    double result;
 
     public MeanMultiThread(int[] data, int lenData, int last, int part, int nbPart) {
         this.data = data;
@@ -25,32 +27,48 @@ public class MeanMultiThread{
     }
 
     double mean(){
-        float mean = 0;
+        int sum = 0;
         int first = part * (last/4);
         last = (part+1) * (last/4)-1;
         int n = last - first;
         int[] sub = subarray(data, first , last);
         for (int i = 0; i<n; i++){
-            mean+=sub[i];
+            sum+=sub[i];
         }
-        double moy = (double)mean/n;
-        return(moy);
+        double mean = (double)sum/n;
+        return(mean);
     }
 
     double meanStochastic(){
-        int moyenne = 0;
-        int nbValeurObservee = lenData/10;
+        int sum = 0;
+        int nbObservedValue = lenData/10;
         int first = part * (last/4);
         last = (part+1) * (last/4)-1;
         int n = last - first;
         int[] sub = subarray(data, first , last);
         Random random = new Random();
         int rd;
-        for (int i = 0; i<nbValeurObservee; i++){
+        for (int i = 0; i < nbObservedValue; i++){
             rd = random.NextInt(lenData);
-            moyenne+=data[rd];
+           sum+=data[rd];
         }
-        double moy = (double) moyenne/nbValeurObservee;
-        return(moy);
+        double mean = (double) sum/nbObservedValue;
+        return(mean);
+    }
+
+    public void setResult(int result) {
+            this.result = result;
+    }
+
+
+    @Override
+    public void run() {
+        int first = part * (last/4);
+        last = (part+1) * (last/4)-1;
+        int[] subdata = subarray(data, first , last);
+        int lenSubData = last - first;
+        Mean meanObj = new Mean(subdata, lenSubData);
+        double res = meanObj.mean();
+        setResults(res);
     }
 }
