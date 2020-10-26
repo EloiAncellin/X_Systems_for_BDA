@@ -1,20 +1,72 @@
 package utils;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import utils.BasicHashSet;
-import utils.LoadData;
-
 public class Projection {
 	
-	private Hashtable<String,Hashtable<Integer,?>> Columns = new Hashtable<>(); 
-	private Hashtable<String,BasicHashSet> HashSetColumns = new Hashtable<String,BasicHashSet>();
+	private static volatile Hashtable<String,Hashtable<Integer,?>> Columns = new Hashtable<>(); 
+	private static volatile Hashtable<String,BasicHashSet> HashSetColumns = new Hashtable<String,BasicHashSet>();
 	
 	
 	public Projection(Hashtable<String,Hashtable<Integer,?>> cl) {
 		
 		this.Columns = cl;
+		Enumeration<String> e = cl.keys();
+		while(e.hasMoreElements()) {
+			
+			HashSetColumns.put(e.nextElement(), new BasicHashSet(cl.get(e.nextElement()).size()));
+		}
+		
+		
+	}
+	
+	public synchronized static void MultiThreadProject( ArrayList<Integer> id, String[] columns, Boolean distinct) {
+		
+		if(distinct ==true) {
+			int size = id.size();
+		ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
+		
+		for(String j : columns) {
+			for(int i : id) {
+				System.out.println(i);
+				HashSetColumns.get(j).add( ((Hashtable)Columns.get(j)).get(i)  );
+				
+				
+				
+				/*if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
+					id.remove(i);
+				}*/ 
+			}
+			OutputsColumnsElements.add(HashSetColumns.get(j));
+			System.out.println();
+			
+		}
+		
+		for (int k=0 ; k < OutputsColumnsElements.size();k++) {
+			Iterator it =  OutputsColumnsElements.get(k).iterator();
+			while(it.hasNext()) {
+				System.out.println(it.next());
+			}
+		}
+		
+		}
+		else {
+			
+			for(String i : columns) {
+				System.out.print(i + " | ") ;
+			}
+			System.out.println();
+			for(int i : id) {
+				for(String j : columns) {
+					System.out.print(((Hashtable)Columns.get(j)).get(i)+ " | ");
+				}
+				System.out.println();
+				
+			}
+			
+		}
 		
 		
 	}
@@ -34,21 +86,18 @@ public class Projection {
 				for(int i : id) {
 					elements.add( ((Hashtable)this.Columns.get(j)).get(i)  );
 					
-					/*if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
-						id.remove(i);
-					}*/ 
 				}
 				OutputsColumnsElements.add(elements);
 				System.out.println();
 				
 			}
-			/*
+			
 			for (int k=0 ; k < OutputsColumnsElements.size();k++) {
 				Iterator it =  OutputsColumnsElements.get(k).iterator();
 				while(it.hasNext()) {
 					System.out.println(it.next());
 				}
-			}*/
+			}
 			
 			
 			

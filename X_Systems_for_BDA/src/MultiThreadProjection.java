@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import utils.LoadData;
@@ -18,7 +19,7 @@ public class MultiThreadProjection implements Runnable {
 			prj = new Projection(hcl);
 		}
 		public void run() {
-			prj.Project(id,cl,d); 
+			Projection.MultiThreadProject(id,cl,d); 
 		}
 		
 		public static void main(String[] args) {
@@ -29,10 +30,15 @@ public class MultiThreadProjection implements Runnable {
 			ArrayList<Integer> tab = new ArrayList<Integer>();
 			Hashtable<String,Hashtable<Integer,?>> cl = RData.GetColumns();
 			tab = new ArrayList(cl.get("CustomerId").values());
-			
+			Enumeration<String> e = cl.keys();
+			while(e.hasMoreElements()) {
+				System.out.println(e.nextElement());
+			}
+					
 			
 			String[] col = {"CustomerAge"};
 			System.out.println(tab.size());
+			
 			for(int i =1 ; i<tab.size();i += tab.size()/4) {
 				if(tab.size()%4 == 0) {
 					if(i+tab.size()/4>tab.size()) {
