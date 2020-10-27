@@ -11,20 +11,17 @@ import utils.MilanMultiKeyBinarySearchMultiThread;
 public class main {
 
 	public static void main(String[] args) throws InterruptedException {
-
 		int key = 10;
 		int part = 0;
 		int nbOfThreads = 4;
-		int[][] data = new int[12][2];
+		int[] data = new int[12];
 		for (int i = 0; i < data.length; i++) {
-			data[i][0] = 3;
-			data[i][1] = i ;
-			System.out.println(data[i][0]+"-"+data[i][1]);
+			data[i]= i + 4;
 		}
 
-		// Example Binary Search with LinkedHashMap
-//		int index = BinarySearch.binarySearch(data, 0, data.length - 1 , 2);
-
+//		 Example Binary Search 
+		int index = BinarySearch.binarySearch(data, 0, data.length - 1 , 4);
+		System.out.println(index);
 
 		// Example Thread Binary Search
 //        BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[4];
@@ -45,10 +42,10 @@ public class main {
 //        	}
 //		}
         
-        int[] keys = new int[12];
-		for (int i = 0; i < 12; i++) {
-			keys[i] = i;
-		}
+//        int[] keys = new int[12];
+//		for (int i = 0; i < 12; i++) {
+//			keys[i] = i;
+//		}
         
 //        MilanMultiKeyBinarySearchMultiThread mmkbsmt[] = new MilanMultiKeyBinarySearchMultiThread[4];
 // 
@@ -69,9 +66,9 @@ public class main {
         
  
 
-		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
-		mmkbs.milanMultiKeyBinarySearch(data, 0, data.length - 1, keys, 0, keys.length - 1);
-		List<Integer> res = mmkbs.getResults();
-		System.out.println(Arrays.toString(res.toArray()));
+//		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
+//		mmkbs.milanMultiKeyBinarySearch(data, 0, data.length - 1, keys, 0, keys.length - 1);
+//		List<Integer> res = mmkbs.getResults();
+//		System.out.println(Arrays.toString(res.toArray()));
 	}
 }

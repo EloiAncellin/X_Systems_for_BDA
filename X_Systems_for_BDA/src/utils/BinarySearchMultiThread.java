@@ -1,17 +1,16 @@
 package utils;
 
-import java.util.List;
 
 public class BinarySearchMultiThread implements Runnable {
 	
-	int[][] data;
+	int[] data;
 	int last;
 	int key;
 	int part;
 	int index = -1;
 	int result;
 	
-	public BinarySearchMultiThread(int[][] data, int last, int key, int part) {
+	public BinarySearchMultiThread(int[] data, int last, int key, int part) {
 		this.data = data;
 		this.last = last;
 		this.key = key;
