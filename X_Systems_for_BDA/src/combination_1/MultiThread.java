@@ -4,24 +4,16 @@ import java.util.ArrayList;
 
 import utils.BinarySearchMultiThread;
 import utils.LoadData;
+import combination.Combination;
 
-public class MultiThread {
-	private String filename;
-	private int lenFile;
-	private Boolean distinct;
-	private int[] keys;
-	private LoadData loadData;
+public class MultiThread extends Combination {
 	private float[] customerPrice;
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
-	public MultiThread(String filename, int lenFile, Boolean distinct, int[] keys) {
-		this.filename = filename;
-		this.lenFile = lenFile;
-		this.distinct = distinct;
-		this.keys = keys;
-		this.loadData = new LoadData(filename);
+	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys) {
+		super(filename, lenFile, distinct, keys);
 	}
 
 	// SELECTION : Multi Key Binary Search
@@ -37,9 +29,9 @@ public class MultiThread {
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[4];
 		Thread myThreads[] = new Thread[4];
 
-		for (int j = 0; j < keys.length; j++) {
+		for (int j = 0; j < getKeys().length; j++) {
 			for (int i = 0; i < nbThreads; i++) {
-				myBSMT[i] = new BinarySearchMultiThread(customerPrice, customerPrice.length, keys[i], part);
+				myBSMT[i] = new BinarySearchMultiThread(customerPrice, customerPrice.length, getKeys()[i], part);
 				myThreads[i] = new Thread(myBSMT[i]);
 				myThreads[i].start();
 				part++;
@@ -61,7 +53,7 @@ public class MultiThread {
 		this.selection.add(result);
 	}
 
-	public void setCustomerPrice(int[] customerPrice) {
+	public void setCustomerPrice(float[] customerPrice) {
 		this.customerPrice = customerPrice;
 	}
 
