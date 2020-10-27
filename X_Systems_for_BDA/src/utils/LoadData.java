@@ -21,10 +21,13 @@ public class LoadData {
 	private Hashtable<Integer,Integer> CustomerId = new Hashtable<>(); 
 	private Hashtable<Integer,String> ProductName = new Hashtable<>();
 	private Hashtable<Integer,Float> ProductPrice = new Hashtable<>();
-	private Hashtable<Integer,Integer> Purchaseld = new Hashtable<>(); 
+	private Hashtable<Integer,Integer> PurchaseId = new Hashtable<>(); 
 	
 	
 	private Hashtable<String,Hashtable<Integer,?>> Columns = new Hashtable<>(); 
+	
+	private String[] columnsname = {"CustomerName","CustomerAge","ProductId","CustomerId",
+			"ProductName","ProductPrice","PurchaseId"};
 	
 	
 	
@@ -36,8 +39,11 @@ public class LoadData {
 		Columns.put("ProductId", ProductId);
 		Columns.put("CustomerId", CustomerId);
 		Columns.put("ProductName", ProductName);
-		Columns.put("ProductId", ProductPrice);
-		Columns.put("PurchaseId", Purchaseld);
+		Columns.put("ProductPrice", ProductPrice);
+		Columns.put("PurchaseId", PurchaseId);
+	
+		
+		
 		
 		
 	}
@@ -64,7 +70,7 @@ public class LoadData {
 	        ProductId.put(i, pdid);
 	        ProductName.put(i, values[4]);
 	        ProductPrice.put(i, pdprice);
-	        Purchaseld.put(i, purch); 
+	        PurchaseId.put(i, purch); 
 	      
 	        
 	        records.add(Arrays.asList(values));
@@ -88,6 +94,10 @@ public class LoadData {
 	
 	public Hashtable<String,Hashtable<Integer,?>> GetColumns(){
 		return this.Columns; 
+	}
+	
+	public String[] GetColumnsName() {
+		return this.columnsname; 
 	}
 	
 	

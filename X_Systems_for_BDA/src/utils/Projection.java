@@ -10,14 +10,13 @@ public class Projection {
 	private static volatile Hashtable<String,BasicHashSet> HashSetColumns = new Hashtable<String,BasicHashSet>();
 	
 	
-	public Projection(Hashtable<String,Hashtable<Integer,?>> cl) {
+	public Projection(Hashtable<String,Hashtable<Integer,?>> cl,String[] allcolnames) {
 		
 		this.Columns = cl;
 		
-		Enumeration<String> e = cl.keys();
-		while(e.hasMoreElements()) {
-			System.out.println(cl.get(e.nextElement()).size());
-			HashSetColumns.put(e.nextElement(), new BasicHashSet(cl.get(e.nextElement()).size()));
+		for(String s : allcolnames) {	
+			this.HashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
+			System.out.println(s);
 		}
 		
 		

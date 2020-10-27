@@ -13,11 +13,11 @@ public class MultiThreadProjection implements Runnable {
 		Boolean d;
 		Projection prj; 
 		
-		public MultiThreadProjection(ArrayList<Integer> id, String[] columns, Boolean distinct,Hashtable<String,Hashtable<Integer,?>> hcl) {
+		public MultiThreadProjection(ArrayList<Integer> id, String[] columns, Boolean distinct,Hashtable<String,Hashtable<Integer,?>> hcl,String[] allcolnames) {
 			this.cl = columns;
 			this.d = distinct;
 			this.id = id; 
-			prj = new Projection(hcl);
+			prj = new Projection(hcl,allcolnames);
 		}
 		
 		
@@ -41,15 +41,17 @@ public class MultiThreadProjection implements Runnable {
 			for (int i = 1; i <= 100; i++)
 			tab.add(i);
 			
+			String [] All_col_names = RData.GetColumnsName();
+			
 					
 			
 			String[] col = {"ProductName"};
 			
 			
 			
-			Thread T1 = new Thread( new MultiThreadProjection(new ArrayList(tab.subList(0, 50)),col,false,cl));
+			Thread T1 = new Thread( new MultiThreadProjection(new ArrayList(tab.subList(0, 50)),col,true,cl,All_col_names));
 			T1.start();
-			Thread T2 = new Thread( new MultiThreadProjection(new ArrayList(tab.subList(50, 100)),col,false,cl));
+			Thread T2 = new Thread( new MultiThreadProjection(new ArrayList(tab.subList(50, 100)),col,true,cl,All_col_names));
 			T2.start();
 			/*
 			for(int i =1 ; i<tab.size();i += tab.size()/4) {
