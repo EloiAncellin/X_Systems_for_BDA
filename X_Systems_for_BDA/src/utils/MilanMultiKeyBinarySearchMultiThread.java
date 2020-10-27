@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
-	int[][] data;
+	int[] data;
 	int last;
 	int[] keys;
 	int part;
 	ArrayList<Integer> results;
 	
-	public MilanMultiKeyBinarySearchMultiThread(int[][] data, int[] keys, int last,  int part) {
+	public MilanMultiKeyBinarySearchMultiThread(int[] data, int[] keys, int last,  int part) {
 		this.data = data;
 		this.last = last;
 		this.keys = keys;
@@ -22,10 +22,9 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	public void run() {
 		int first = part * (last/4);
 		last = (part+1) * (last/4)-1;
-		int[] sub = subArray(keys, first , last);
-
+		int[] sub = subArray(data, first , last);
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
-		mmkbs.milanMultiKeyBinarySearch(data, 0, data.length - 1, sub, 0, sub.length - 1);
+		mmkbs.milanMultiKeyBinarySearch(sub, 0, sub.length -1 , keys, 0, keys.length-1);
 		this.setResults(mmkbs.getResults());
 	} 
 	

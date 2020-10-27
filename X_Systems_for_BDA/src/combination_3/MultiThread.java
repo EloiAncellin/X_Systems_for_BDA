@@ -11,7 +11,7 @@ public class MultiThread {
 	private Boolean distinct;
 	private int[] keys;
 	private LoadData loadData;
-	private int[][] customerIdPrice;
+	private int[] customerPrice;
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
@@ -40,7 +40,7 @@ public class MultiThread {
       MilanMultiKeyBinarySearchMultiThread mmkbsmt[] = new MilanMultiKeyBinarySearchMultiThread[4];
 
       for (int i = 0; i < nbThreads ; i++) {
-      	mmkbsmt[i] = new MilanMultiKeyBinarySearchMultiThread(customerIdPrice, keys, keys.length, part);
+      	mmkbsmt[i] = new MilanMultiKeyBinarySearchMultiThread(customerPrice, keys, customerPrice.length, part);
       	myThreads[i] = new Thread(mmkbsmt[i]);
           myThreads[i].start();
           part++;
@@ -63,8 +63,8 @@ public class MultiThread {
 	}
 	
 
-	public void setCustomerIdPrice(int[][] customerIdPrice) {
-		this.customerIdPrice = customerIdPrice;
+	public void setCustomerPrice(int[] customerPrice) {
+		this.customerPrice = customerPrice;
 	}
 
 }

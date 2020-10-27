@@ -12,7 +12,7 @@ public class SingleThread {
 	private Boolean distinct;
 	private int[] keys;
 	private LoadData loadData;
-	private int[][] customerIdPrice;
+	private int[] customerPrice;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
 	public SingleThread(String filename, int lenFile, Boolean distinct, int[] keys) {
@@ -34,7 +34,7 @@ public class SingleThread {
 
 		// this.customerIdPrice =
 		for (int i = 0; i < keys.length; i++) {
-			addSelection(BinarySearch.binarySearch(customerIdPrice, 0, customerIdPrice.length - 1, keys[i]));
+			addSelection(BinarySearch.binarySearch(customerPrice, 0, customerPrice.length - 1, keys[i]));
 		}
 
 		// ***** PROJECTION ***** //
@@ -46,8 +46,7 @@ public class SingleThread {
 		this.selection.add(result);
 	}
 
-	public void setCustomerIdPrice(int[][] customerIdPrice) {
-		this.customerIdPrice = customerIdPrice;
+	public void setCustomerPrice(int[] customerPrice) {
+		this.customerPrice = customerPrice;
 	}
-
 }
