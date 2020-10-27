@@ -9,7 +9,7 @@ public class BinarySearch {
 		return ((left) + (((right) - (left)) >> 1));
 	}
 
-	public static int binarySearch(int[] data, int first, int last, int key) {
+	public static int binarySearch(float[] data, int first, int last, double key) {
 		int mid = (first + last) / 2;
 		while (first <= last) {
 			if (data[mid] < key) {
@@ -27,7 +27,7 @@ public class BinarySearch {
 		return -1;
 	}
 
-	public static int[] binarySearchForMkbs(int[] data, int first, int last, int key) {
+	public static int[] binarySearchForMkbs(float[] data, int first, int last, double key) {
 		int[] result = new int[2];
 
 		int mid = middle(first, last);

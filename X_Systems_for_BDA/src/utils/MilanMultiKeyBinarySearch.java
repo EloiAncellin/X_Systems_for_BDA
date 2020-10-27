@@ -15,7 +15,7 @@ public class MilanMultiKeyBinarySearch {
 		return ((left) + (((right) - (left)) >> 1));
 	}
 
-	public void milanMultiKeyBinarySearch(int[] data, int arr_l, int arr_r, int[] keys, int keys_l, int keys_r){  
+	public void milanMultiKeyBinarySearch(float[] data, int arr_l, int arr_r, double[] keys, int keys_l, int keys_r){  
 		if(keys_r - keys_l < 0) {
 			return;
 		}

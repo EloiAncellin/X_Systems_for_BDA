@@ -12,7 +12,7 @@ public class SingleThread {
 	private Boolean distinct;
 	private int[] keys;
 	private LoadData loadData;
-	private int[] customerPrice;
+	private float[] customerPrice;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
 	public SingleThread(String filename, int lenFile, Boolean distinct, int[] keys) {

@@ -11,7 +11,7 @@ public class MultiThread {
 	private Boolean distinct;
 	private int[] keys;
 	private LoadData loadData;
-	private int[] customerPrice;
+	private float[] customerPrice;
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();

@@ -5,22 +5,28 @@ import java.util.List;
 
 import utils.BinarySearch;
 import utils.BinarySearchMultiThread;
+import utils.LoadData;
 import utils.MilanMultiKeyBinarySearch;
 import utils.MilanMultiKeyBinarySearchMultiThread;
 
 public class main {
 
 	public static void main(String[] args) throws InterruptedException {
-		int key = 4;
+		double key = 2226.13;
 		int part = 0;
 		int nbOfThreads = 4;
-		int[] data = new int[12];
+		int lenFile = 100;
+		float[] data = new float[lenFile];
 		for (int i = 0; i < data.length; i++) {
 			data[i] = i + 4;
 		}
+		
+		LoadData RData = new LoadData("src/dataset_customer_price/dataset_customer_price_100.csv", lenFile);
+		data = RData.readPrices();
+		System.out.println(Arrays.toString(data));
 
 //		 Example Binary Search 
-		int index = BinarySearch.binarySearch(data, 0, data.length - 1, 2);
+		int index = BinarySearch.binarySearch(data, 0, data.length - 1, key);
 
 		// Example Thread Binary Search
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[4];
@@ -39,7 +45,7 @@ public class main {
 				System.out.println(myBSMT[i].getResult());
 		}
 
-        int[] keys = new int[6];
+        double[] keys = new double[6];
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = i;
 		}
