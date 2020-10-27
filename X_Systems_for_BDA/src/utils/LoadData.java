@@ -35,7 +35,7 @@ public class LoadData {
 		Columns.put("CustomerAge", CustomerAge ); 
 		Columns.put("ProductId", ProductId);
 		Columns.put("CustomerId", CustomerId);
-		Columns.put("PoductName", ProductName);
+		Columns.put("ProductName", ProductName);
 		Columns.put("ProductId", ProductPrice);
 		Columns.put("PurchaseId", Purchaseld);
 		
@@ -49,6 +49,7 @@ public class LoadData {
 	    String line;
 	    int i =0 ;
 	    while ((line = br.readLine()) != null) {
+	    	
 	    	if(i>=1) {
 	    	String[] values = line.split(",");
 	        int id = Integer.parseInt(values[0]);
@@ -57,13 +58,13 @@ public class LoadData {
 	        float pdprice = Float.parseFloat(values[5]);
 	        int purch = Integer.parseInt(values[6]);
 	        
-	        CustomerId.put(i, id);
-	        CustomerName.put(id, values[1]);
-	        CustomerAge.put(id, age);
-	        ProductId.put(id, pdid);
-	        ProductName.put(id, values[4]);
-	        ProductPrice.put(id, pdprice);
-	        Purchaseld.put(id, purch); 
+	        CustomerId.put(i,id);
+	        CustomerName.put(i, values[1]);
+	        CustomerAge.put(i, age);
+	        ProductId.put(i, pdid);
+	        ProductName.put(i, values[4]);
+	        ProductPrice.put(i, pdprice);
+	        Purchaseld.put(i, purch); 
 	      
 	        
 	        records.add(Arrays.asList(values));
@@ -71,11 +72,11 @@ public class LoadData {
 	          i++;
 	    }
 	    
-	    /*
-	    Enumeration e = CustomerName.elements();
+	    
+	    /*Enumeration e = Columns.keys();
 	    while(e.hasMoreElements())
-	        System.out.println(e.nextElement());
-	    */
+	        System.out.println(Columns.get(e.nextElement()).size());*/
+	    
 	    
 	 	}catch(IOException ex) {
 	 		ex.printStackTrace();

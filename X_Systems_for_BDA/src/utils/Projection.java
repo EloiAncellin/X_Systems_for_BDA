@@ -13,25 +13,28 @@ public class Projection {
 	public Projection(Hashtable<String,Hashtable<Integer,?>> cl) {
 		
 		this.Columns = cl;
+		
 		Enumeration<String> e = cl.keys();
 		while(e.hasMoreElements()) {
-			
+			System.out.println(cl.get(e.nextElement()).size());
 			HashSetColumns.put(e.nextElement(), new BasicHashSet(cl.get(e.nextElement()).size()));
 		}
 		
 		
+		
+		
 	}
 	
-	public synchronized static void MultiThreadProject( ArrayList<Integer> id, String[] columns, Boolean distinct) {
+	public synchronized  static void MultiThreadProject( ArrayList<Integer> index, String[] columns, Boolean distinct) {
 		
 		if(distinct ==true) {
-			int size = id.size();
+			int size = index.size();
 		ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
 		
 		for(String j : columns) {
-			for(int i : id) {
+			for(int i : index) {
 				System.out.println(i);
-				HashSetColumns.get(j).add( ((Hashtable)Columns.get(j)).get(i)  );
+				HashSetColumns.get(j).add( ((Hashtable)Columns.get(j)).get(i)  ); // c'est in l'intérieur du add que ca plante
 				
 				
 				
@@ -58,7 +61,7 @@ public class Projection {
 				System.out.print(i + " | ") ;
 			}
 			System.out.println();
-			for(int i : id) {
+			for(int i : index) {
 				for(String j : columns) {
 					System.out.print(((Hashtable)Columns.get(j)).get(i)+ " | ");
 				}
@@ -72,19 +75,19 @@ public class Projection {
 	}
 	
 	
-	public synchronized void  Project( ArrayList<Integer> id, String[] columns, Boolean distinct) {
+	public synchronized void  Project( ArrayList<Integer> index, String[] columns, Boolean distinct) {
 		
 		Hashtable<Integer,Integer> hid = new Hashtable<Integer,Integer>();
 		
 		if( distinct == true) {
 			
-			int size = id.size();
+			int size = index.size();
 			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
 			
 			for(String j : columns) {
 				BasicHashSet elements = new BasicHashSet(size);  
-				for(int i : id) {
-					elements.add( ((Hashtable)this.Columns.get(j)).get(i)  );
+				for(int i : index) {
+					elements.add( ((Hashtable)Columns.get(j)).get(i)  );
 					
 				}
 				OutputsColumnsElements.add(elements);
@@ -108,9 +111,10 @@ public class Projection {
 				System.out.print(i + " | ") ;
 			}
 			System.out.println();
-			for(int i : id) {
+			int record;
+			for(int i : index) {
 				for(String j : columns) {
-					System.out.print(((Hashtable)this.Columns.get(j)).get(i)+ " | ");
+					System.out.print(((Hashtable)Columns.get(j)).get(i)+ " | ");
 				}
 				System.out.println();
 				
@@ -135,12 +139,14 @@ public class Projection {
 		
 		ArrayList<Integer> tab = new ArrayList<Integer>();
 		Hashtable<String,Hashtable<Integer,?>> cl = RData.GetColumns();
-		tab = new ArrayList(cl.get("CustomerId").values());
+		tab = new ArrayList();
+		for (int i = 1; i <= 100; i++)
+		tab.add(i);
 		
 		
 		Projection prj = new Projection(cl);
-		String[] col = {"CustomerAge"};
-		prj.Project(tab, col,true);
+		String[] col = {"CustomerAge","ProductName"};
+		prj.Project(tab, col,false);
 	
 		}
 	
