@@ -142,8 +142,8 @@ public class Projection {
 		for (int i = 1; i <= 100; i++)
 		tab.add(i);
 		
-		
-		Projection prj = new Projection(cl);
+		String [] All_col_names = RData.GetColumnsName();
+		Projection prj = new Projection(cl,All_col_names);
 		String[] col = {"CustomerAge","ProductName"};
 		prj.Project(tab, col,false);
 	
