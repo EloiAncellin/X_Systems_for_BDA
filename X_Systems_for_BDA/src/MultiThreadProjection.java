@@ -31,7 +31,7 @@ public class MultiThreadProjection implements Runnable {
 		
 		
 		public static void main(String[] args) {
-			LoadData RData = new LoadData("src/dataset/dataset_100.csv");
+			LoadData RData = new LoadData("src/dataset/dataset_100.csv",100);
 			
 			RData.read();
 			

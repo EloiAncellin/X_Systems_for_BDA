@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
-	int[][] data;
+	float[] data;
 	int last;
-	int[] keys;
+	double[] keys;
 	int part;
 	ArrayList<Integer> results;
 	
-	public MilanMultiKeyBinarySearchMultiThread(int[][] data, int[] keys, int last,  int part) {
+	public MilanMultiKeyBinarySearchMultiThread(float[] data, double[] keys, int last,  int part) {
 		this.data = data;
 		this.last = last;
 		this.keys = keys;
@@ -22,17 +22,16 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	public void run() {
 		int first = part * (last/4);
 		last = (part+1) * (last/4)-1;
-		int[] sub = subArray(keys, first , last);
-
+		float[] sub = subArray(data, first , last);
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
-		mmkbs.milanMultiKeyBinarySearch(data, 0, data.length - 1, sub, 0, sub.length - 1);
+		mmkbs.milanMultiKeyBinarySearch(sub, 0, sub.length -1 , keys, 0, keys.length-1);
 		this.setResults(mmkbs.getResults());
 	} 
 	
 	// Generic function to get sub-array of a non-primitive array
 	// between specified indices
-	public static<T> int[] subArray(int[] keys, int beg, int end) {
-		return Arrays.copyOfRange(keys, beg, end + 1);
+	public static<T> float[] subArray(float[] data, int beg, int end) {
+		return Arrays.copyOfRange(data, beg, end + 1);
 	}
 
 	public ArrayList<Integer> getResults() {

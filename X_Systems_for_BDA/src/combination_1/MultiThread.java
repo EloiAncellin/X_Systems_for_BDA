@@ -11,7 +11,7 @@ public class MultiThread {
 	private Boolean distinct;
 	private int[] keys;
 	private LoadData loadData;
-	private int[][] customerIdPrice;
+	private float[] customerPrice;
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
@@ -39,7 +39,7 @@ public class MultiThread {
 
 		for (int j = 0; j < keys.length; j++) {
 			for (int i = 0; i < nbThreads; i++) {
-				myBSMT[i] = new BinarySearchMultiThread(customerIdPrice, customerIdPrice.length, keys[i], part);
+				myBSMT[i] = new BinarySearchMultiThread(customerPrice, customerPrice.length, keys[i], part);
 				myThreads[i] = new Thread(myBSMT[i]);
 				myThreads[i].start();
 				part++;
@@ -61,8 +61,8 @@ public class MultiThread {
 		this.selection.add(result);
 	}
 
-	public void setCustomerIdPrice(int[][] customerIdPrice) {
-		this.customerIdPrice = customerIdPrice;
+	public void setCustomerPrice(int[] customerPrice) {
+		this.customerPrice = customerPrice;
 	}
 
 }
