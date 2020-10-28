@@ -16,6 +16,7 @@ public class SingleThread extends Combination {
 	// PROJECTION : Hashing based projection
 	// AGGREGATION :
 	public void start_combination() {
+		
 		getLoadData().read();
 		// ***** SELECTION ***** //
 		for (int i = 0; i < getKeys().length; i++) {
