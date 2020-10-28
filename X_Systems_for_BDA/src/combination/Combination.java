@@ -15,6 +15,7 @@ public abstract class Combination {
 		this.keys = keys;
 		this.loadData = new LoadData(filename, lenFile);
 		this.colnames = colnames;
+		this.nbThreads = nbThreads;
 	}
 	
 	public abstract void start_combination() throws InterruptedException;
