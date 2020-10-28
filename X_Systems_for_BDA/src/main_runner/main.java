@@ -1,18 +1,17 @@
 package main_runner;
 
-import java.util.Arrays;
-import java.util.List;
 
-import utils.BinarySearch;
-import utils.BinarySearchMultiThread;
-import utils.LoadData;
-import utils.MilanMultiKeyBinarySearch;
-import utils.MilanMultiKeyBinarySearchMultiThread;
-
+import combination_1.SingleThread;
+import combination_1.MultiThread;
 public class main {
 
 	public static void main(String[] args) throws InterruptedException {
 		
+		double[] keys = {4964.79};
+		SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys);
+		st.start_combination();
+		MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys);
+		mt.start_combination();
 		
 	}
 }

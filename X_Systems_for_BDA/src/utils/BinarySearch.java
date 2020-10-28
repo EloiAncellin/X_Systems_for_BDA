@@ -7,7 +7,7 @@ public class BinarySearch {
 		return ((left) + (((right) - (left)) >> 1));
 	}
 
-	public static int binarySearch(float[] data, int first, int last, double key) {
+	public static int binarySearch(double[] data, int first, int last, double key) {
 		int mid = (first + last) / 2;
 		while (first <= last) {
 			if (data[mid] < key) {

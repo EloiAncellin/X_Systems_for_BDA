@@ -19,6 +19,7 @@ public class MultiThread extends Combination {
 	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
 
+		getLoadData().read();
 		// ***** SELECTION ***** //
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[4];
 		Thread myThreads[] = new Thread[4];
@@ -26,14 +27,14 @@ public class MultiThread extends Combination {
 		for (int j = 0; j < getKeys().length; j++) {
 			for (int i = 0; i < nbThreads; i++) {
 				myBSMT[i] = new BinarySearchMultiThread(getLoadData().getCustomerPrice(),
-						getLoadData().getCustomerPrice().length, getKeys()[i], part);
+						getLoadData().getCustomerPrice().length, getKeys()[j], part);
 				myThreads[i] = new Thread(myBSMT[i]);
 				myThreads[i].start();
 				part++;
 			}
 			for (int i = 0; i < nbThreads; i++) {
 				myThreads[i].join();
-				if (myBSMT[i].getResult() != 0) {
+				if (myBSMT[i].getResult() != -1) {
 					addSelection(myBSMT[i].getResult());
 				}
 			}
@@ -45,7 +46,8 @@ public class MultiThread extends Combination {
 	}
 
 	public void addSelection(int result) {
-		this.selection.add(result);
+		System.out.println(result+1);
+		this.selection.add(result+1);
 	}
 
 }

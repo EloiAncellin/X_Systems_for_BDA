@@ -1,16 +1,17 @@
 package utils;
 
+import java.util.Arrays;
 
 public class BinarySearchMultiThread implements Runnable {
 	
-	float[] data;
+	double[] data;
 	int last;
 	double key;
 	int part;
 	int index = -1;
 	int result;
 	
-	public BinarySearchMultiThread(float[] data, int last, double key, int part) {
+	public BinarySearchMultiThread(double[] data, int last, double key, int part) {
 		this.data = data;
 		this.last = last;
 		this.key = key;
@@ -25,8 +26,9 @@ public class BinarySearchMultiThread implements Runnable {
 	} 
 	
 	public int getResult() {
+		System.out.println(index);
 		if(index != -1 ) {
-			return index  + part*4;
+			return index;
 		}
 		return index;
 	}

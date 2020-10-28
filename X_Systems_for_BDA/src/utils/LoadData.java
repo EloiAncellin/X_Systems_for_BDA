@@ -16,10 +16,10 @@ public class LoadData {
 	private Hashtable<Integer, Integer> ProductId = new Hashtable<>();
 	private Hashtable<Integer, Integer> CustomerId = new Hashtable<>();
 	private Hashtable<Integer, String> ProductName = new Hashtable<>();
-	private Hashtable<Integer, Float> ProductPrice = new Hashtable<>();
+	private Hashtable<Integer, Double> ProductPrice = new Hashtable<>();
 	private Hashtable<Integer, Integer> PurchaseId = new Hashtable<>();
 	
-	float[] customerPrice;
+	double[] customerPrice;
 
 	private Hashtable<String, Hashtable<Integer, ?>> Columns = new Hashtable<>();
 
@@ -29,7 +29,7 @@ public class LoadData {
 	public LoadData(String fileName, int lenFile) {
 		this.FileName = fileName;
 		this.lenFile = lenFile;
-		this.customerPrice = new float[lenFile];
+		this.customerPrice = new double[lenFile];
 
 		Columns.put("CustomerName", CustomerName);
 		Columns.put("CustomerAge", CustomerAge);
@@ -53,7 +53,7 @@ public class LoadData {
 					int id = Integer.parseInt(values[0]);
 					int age = Integer.parseInt(values[2]);
 					int pdid = Integer.parseInt(values[3]);
-					float pdprice = Float.parseFloat(values[5]);
+					double pdprice = Double.parseDouble(values[5]);
 					int purch = Integer.parseInt(values[6]);
 
 					CustomerId.put(i, id);
@@ -63,7 +63,7 @@ public class LoadData {
 					ProductName.put(i, values[4]);
 					ProductPrice.put(i, pdprice);
 					PurchaseId.put(i, purch);
-					customerPrice[i] = pdprice;
+					customerPrice[i-1] = pdprice;
 				}
 				i++;
 			}
@@ -78,7 +78,7 @@ public class LoadData {
 		return this.columnsnames;
 	}
 
-	public float[] getCustomerPrice() {
+	public double[] getCustomerPrice() {
 		return customerPrice;
 	}
 

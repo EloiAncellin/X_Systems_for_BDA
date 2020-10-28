@@ -39,7 +39,9 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	}
 	
 	public void setResults(ArrayList<Integer> results) {
-		this.results = results;
+		for(int i =0; i<results.size() ; i ++) {
+			this.results.add(results.get(i)+ part*4);
+		}
 	}
 
 	
