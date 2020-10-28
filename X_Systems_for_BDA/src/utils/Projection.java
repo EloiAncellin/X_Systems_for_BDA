@@ -2,6 +2,7 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Projection {
@@ -20,10 +21,10 @@ public class Projection {
 
 	}
 
-	public synchronized static void MultiThreadProject(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
-
+	public synchronized static ArrayList<BasicHashSet> MultiThreadProject(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
+		ArrayList<BasicHashSet> outputsColumnsElements = new ArrayList<BasicHashSet>();
 		if (distinct == true) {
-			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
+			
 
 			for (String j : colnames) {
 				for (int i : index) {
@@ -34,15 +35,17 @@ public class Projection {
 					 * id.remove(i); }
 					 */
 				}
-				OutputsColumnsElements.add(hashSetColumns.get(j));
+				outputsColumnsElements.add(hashSetColumns.get(j));
 
 			}
+			
+			
 
-			/*
-			 * for (int k = 0; k < OutputsColumnsElements.size(); k++) { Iterator<?> it =
-			 * OutputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
-			 * System.out.println(it.next()); } }
-			 */
+			
+			  for (int k = 0; k < outputsColumnsElements.size(); k++) { Iterator<?> it =
+			  outputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
+			  System.out.println(it.next()); } }
+			 
 
 		} /*
 			 * else {
@@ -56,7 +59,7 @@ public class Projection {
 			 * 
 			 * }
 			 */
-
+		return outputsColumnsElements; 
 	}
 
 	public void Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
@@ -73,28 +76,32 @@ public class Projection {
 
 				}
 				OutputsColumnsElements.add(elements);
-				
 
 			}
 
-			/*
-			 * for (int k = 0; k < OutputsColumnsElements.size(); k++) { Iterator it =
-			 * OutputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
-			 * System.out.println(it.next()); } }
-			 */
+			for (int k = 0; k < OutputsColumnsElements.size(); k++) {
+				Iterator<?> it = OutputsColumnsElements.get(k).iterator();
+				while (it.hasNext()) {
+					System.out.println(it.next());
+				}
+			}
 
-		} /*
-			 * else {
-			 * 
-			 * for (String i : colnames) { System.out.print(i + " | "); }
-			 * System.out.println(); int record; for (int i : index) { for (String j :
-			 * colnames) { System.out.print(((Hashtable) columns.get(j)).get(i) + " | "); }
-			 * System.out.println();
-			 * 
-			 * }
-			 * 
-			 * }
-			 */
+		} else {
+
+			for (String i : colnames) {
+				System.out.print(i + " | ");
+			}
+			System.out.println();
+			
+			for (int i : index) {
+				for (String j : colnames) {
+					System.out.print(((Hashtable<Integer, ?>) columns.get(j)).get(i) + " | ");
+				}
+				System.out.println();
+
+			}
+
+		}
 
 	}
 
@@ -419,23 +426,22 @@ public class Projection {
 
 	}
 
-	/*public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		LoadData RData = new LoadData("src/dataset/dataset_100.csv", 100);
-
-		RData.read();
-
-		ArrayList<Integer> tab = new ArrayList<Integer>();
-		Hashtable<String, Hashtable<Integer, ?>> cl = RData.GetColumns();
-		tab = new ArrayList();
-		for (int i = 1; i <= 100; i++)
-			tab.add(i);
-
-		String[] All_col_names = RData.GetColumnsName();
-		Projection prj = new Projection(cl, All_col_names);
-		String[] col = { "CustomerAge", "ProductName" };
-		prj.Project(tab, col, false);
-
-	}*/
+	/*
+	 * public static void main(String[] args) throws Exception { // TODO
+	 * Auto-generated method stub LoadData RData = new
+	 * LoadData("src/dataset/dataset_100.csv", 100);
+	 * 
+	 * RData.read();
+	 * 
+	 * ArrayList<Integer> tab = new ArrayList<Integer>(); Hashtable<String,
+	 * Hashtable<Integer, ?>> cl = RData.GetColumns(); tab = new ArrayList(); for
+	 * (int i = 1; i <= 100; i++) tab.add(i);
+	 * 
+	 * String[] All_col_names = RData.GetColumnsName(); Projection prj = new
+	 * Projection(cl, All_col_names); String[] col = { "CustomerAge", "ProductName"
+	 * }; prj.Project(tab, col, false);
+	 * 
+	 * }
+	 */
 
 }

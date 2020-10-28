@@ -15,7 +15,9 @@ public class MultiThreadProjection implements Runnable {
 				String[] allcolnames, int part ,int last) {
 			this.cl = columns;
 			this.distinct = distinct;
-			this.id = id; 		
+			this.id = id;
+			this.part = part;
+			this.last = last;
 		}
 		
 		
