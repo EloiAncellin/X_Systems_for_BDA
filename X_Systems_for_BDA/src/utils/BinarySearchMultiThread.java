@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.Arrays;
-
 public class BinarySearchMultiThread implements Runnable {
 	
 	double[] data;
@@ -26,7 +24,6 @@ public class BinarySearchMultiThread implements Runnable {
 	} 
 	
 	public int getResult() {
-		System.out.println(index);
 		if(index != -1 ) {
 			return index;
 		}

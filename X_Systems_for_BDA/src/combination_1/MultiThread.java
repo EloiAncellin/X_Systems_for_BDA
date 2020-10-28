@@ -38,6 +38,7 @@ public class MultiThread extends Combination {
 					addSelection(myBSMT[i].getResult());
 				}
 			}
+			part = 0;
 		}
 
 		// ***** PROJECTION ***** //

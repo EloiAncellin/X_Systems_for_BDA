@@ -9,7 +9,6 @@ public class LoadData {
 
 	private String FileName;
 
-	private int lenFile;
 
 	private Hashtable<Integer, String> CustomerName = new Hashtable<>();
 	private Hashtable<Integer, Integer> CustomerAge = new Hashtable<>();
@@ -28,7 +27,6 @@ public class LoadData {
 
 	public LoadData(String fileName, int lenFile) {
 		this.FileName = fileName;
-		this.lenFile = lenFile;
 		this.customerPrice = new double[lenFile];
 
 		Columns.put("CustomerName", CustomerName);
