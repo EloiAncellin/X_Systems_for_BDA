@@ -18,6 +18,8 @@ public class LoadData {
 	private Hashtable<Integer, String> ProductName = new Hashtable<>();
 	private Hashtable<Integer, Float> ProductPrice = new Hashtable<>();
 	private Hashtable<Integer, Integer> PurchaseId = new Hashtable<>();
+	
+	float[] customerPrice;
 
 	private Hashtable<String, Hashtable<Integer, ?>> Columns = new Hashtable<>();
 
@@ -27,6 +29,7 @@ public class LoadData {
 	public LoadData(String fileName, int lenFile) {
 		this.FileName = fileName;
 		this.lenFile = lenFile;
+		this.customerPrice = new float[lenFile];
 
 		Columns.put("CustomerName", CustomerName);
 		Columns.put("CustomerAge", CustomerAge);
@@ -60,6 +63,7 @@ public class LoadData {
 					ProductName.put(i, values[4]);
 					ProductPrice.put(i, pdprice);
 					PurchaseId.put(i, purch);
+					customerPrice[i] = pdprice;
 				}
 				i++;
 			}
@@ -74,23 +78,8 @@ public class LoadData {
 		return this.columnsnames;
 	}
 
-	public float[] readPrices() {
-		float[] customerPrice = new float[lenFile];
-		try (BufferedReader br = new BufferedReader(new FileReader(this.FileName))) {
-			String line;
-			int i = 0;
-			while ((line = br.readLine()) != null) {
-				if (i >= 1) {
-					String[] values = line.split(",");
-					customerPrice[i - 1] = Float.parseFloat(values[1]);
-				}
-				i++;
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+	public float[] getCustomerPrice() {
 		return customerPrice;
-
 	}
 
 	public Hashtable<String, Hashtable<Integer, ?>> GetColumns() {

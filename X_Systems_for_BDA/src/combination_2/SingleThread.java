@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import combination.Combination;
 import utils.MilanMultiKeyBinarySearch;
 
-
 public class SingleThread extends Combination {
 
-	private float[] customerPrice;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
 	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys) {
@@ -26,7 +24,8 @@ public class SingleThread extends Combination {
 
 		// this.customerIdPrice =
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
-		mmkbs.milanMultiKeyBinarySearch(customerPrice, 0, customerPrice.length - 1, getKeys(), 0, getKeys().length - 1);
+		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0,
+				getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
 		setSelection(mmkbs.getResults());
 
 		// ***** PROJECTION ***** //
@@ -40,10 +39,6 @@ public class SingleThread extends Combination {
 
 	public void setSelection(ArrayList<Integer> results) {
 		this.selection = results;
-	}
-
-	public void setCustomerPrice(float[] customerPrice) {
-		this.customerPrice = customerPrice;
 	}
 
 }

@@ -3,11 +3,9 @@ package combination_1;
 import java.util.ArrayList;
 
 import utils.BinarySearchMultiThread;
-import utils.LoadData;
 import combination.Combination;
 
 public class MultiThread extends Combination {
-	private float[] customerPrice;
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
@@ -22,16 +20,13 @@ public class MultiThread extends Combination {
 	public void start_combination() throws InterruptedException {
 
 		// ***** SELECTION ***** //
-
-		// Read customer price
-
-		// this.customerIdPrice =
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[4];
 		Thread myThreads[] = new Thread[4];
 
 		for (int j = 0; j < getKeys().length; j++) {
 			for (int i = 0; i < nbThreads; i++) {
-				myBSMT[i] = new BinarySearchMultiThread(customerPrice, customerPrice.length, getKeys()[i], part);
+				myBSMT[i] = new BinarySearchMultiThread(getLoadData().getCustomerPrice(),
+						getLoadData().getCustomerPrice().length, getKeys()[i], part);
 				myThreads[i] = new Thread(myBSMT[i]);
 				myThreads[i].start();
 				part++;
@@ -51,10 +46,6 @@ public class MultiThread extends Combination {
 
 	public void addSelection(int result) {
 		this.selection.add(result);
-	}
-
-	public void setCustomerPrice(float[] customerPrice) {
-		this.customerPrice = customerPrice;
 	}
 
 }
