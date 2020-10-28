@@ -10,7 +10,7 @@ public interface BasicSet {
     // Returns true if this set contains the specified element
     boolean contains(Object element);
     // Returns an iterator over the elements in this set
-    Iterator iterator();
+    Iterator<?> iterator();
     
     ArrayList<?> toList(); 
     // Returns the number of elements in this set

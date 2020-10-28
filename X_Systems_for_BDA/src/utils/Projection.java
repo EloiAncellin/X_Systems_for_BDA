@@ -2,115 +2,99 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Projection {
 
-	private static volatile Hashtable<String, Hashtable<Integer, ?>> Columns = new Hashtable<>();
-	private static volatile Hashtable<String, BasicHashSet> HashSetColumns = new Hashtable<String, BasicHashSet>();
+	private static volatile Hashtable<String, Hashtable<Integer, ?>> columns = new Hashtable<>();
+	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
 
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
 
-		this.Columns = cl;
+		columns = cl;
 
 		for (String s : allcolnames) {
-			this.HashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
-			System.out.println(s);
+			hashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
+
 		}
 
 	}
 
-	public synchronized static void MultiThreadProject(ArrayList<Integer> index, String[] columns, Boolean distinct) {
+	public synchronized static void MultiThreadProject(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
 
 		if (distinct == true) {
-			int size = index.size();
 			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
 
-			for (String j : columns) {
+			for (String j : colnames) {
 				for (int i : index) {
-					System.out.println(i);
-					HashSetColumns.get(j).add(((Hashtable) Columns.get(j)).get(i)); // c'est in l'intérieur du add que
-																					// ca plante
+					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
 
 					/*
 					 * if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
 					 * id.remove(i); }
 					 */
 				}
-				OutputsColumnsElements.add(HashSetColumns.get(j));
-				System.out.println();
+				OutputsColumnsElements.add(hashSetColumns.get(j));
 
 			}
 
-			for (int k = 0; k < OutputsColumnsElements.size(); k++) {
-				Iterator it = OutputsColumnsElements.get(k).iterator();
-				while (it.hasNext()) {
-					System.out.println(it.next());
-				}
-			}
+			/*
+			 * for (int k = 0; k < OutputsColumnsElements.size(); k++) { Iterator<?> it =
+			 * OutputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
+			 * System.out.println(it.next()); } }
+			 */
 
-		} else {
-
-			for (String i : columns) {
-				System.out.print(i + " | ");
-			}
-			System.out.println();
-			for (int i : index) {
-				for (String j : columns) {
-					System.out.print(((Hashtable) Columns.get(j)).get(i) + " | ");
-				}
-				System.out.println();
-
-			}
-
-		}
+		} /*
+			 * else {
+			 * 
+			 * for (String i : colnames) { System.out.print(i + " | "); }
+			 * System.out.println(); for (int i : index) { for (String j : colnames) {
+			 * System.out.print(((Hashtable) columns.get(j)).get(i) + " | "); }
+			 * System.out.println();
+			 * 
+			 * }
+			 * 
+			 * }
+			 */
 
 	}
 
-	public synchronized void Project(ArrayList<Integer> index, String[] columns, Boolean distinct) {
-
-		Hashtable<Integer, Integer> hid = new Hashtable<Integer, Integer>();
+	public void Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
 
 		if (distinct == true) {
 
 			int size = index.size();
 			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
 
-			for (String j : columns) {
+			for (String j : colnames) {
 				BasicHashSet elements = new BasicHashSet(size);
 				for (int i : index) {
-					elements.add(((Hashtable) Columns.get(j)).get(i));
+					elements.add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
 
 				}
 				OutputsColumnsElements.add(elements);
-				System.out.println();
+				
 
 			}
 
-			for (int k = 0; k < OutputsColumnsElements.size(); k++) {
-				Iterator it = OutputsColumnsElements.get(k).iterator();
-				while (it.hasNext()) {
-					System.out.println(it.next());
-				}
-			}
+			/*
+			 * for (int k = 0; k < OutputsColumnsElements.size(); k++) { Iterator it =
+			 * OutputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
+			 * System.out.println(it.next()); } }
+			 */
 
-		} else {
-
-			for (String i : columns) {
-				System.out.print(i + " | ");
-			}
-			System.out.println();
-			int record;
-			for (int i : index) {
-				for (String j : columns) {
-					System.out.print(((Hashtable) Columns.get(j)).get(i) + " | ");
-				}
-				System.out.println();
-
-			}
-
-		}
+		} /*
+			 * else {
+			 * 
+			 * for (String i : colnames) { System.out.print(i + " | "); }
+			 * System.out.println(); int record; for (int i : index) { for (String j :
+			 * colnames) { System.out.print(((Hashtable) columns.get(j)).get(i) + " | "); }
+			 * System.out.println();
+			 * 
+			 * }
+			 * 
+			 * }
+			 */
 
 	}
 
@@ -435,7 +419,7 @@ public class Projection {
 
 	}
 
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		LoadData RData = new LoadData("src/dataset/dataset_100.csv", 100);
 
@@ -452,6 +436,6 @@ public class Projection {
 		String[] col = { "CustomerAge", "ProductName" };
 		prj.Project(tab, col, false);
 
-	}
+	}*/
 
 }

@@ -3,19 +3,13 @@ package utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 public class LoadData {
 
 	private String FileName;
-	
-	private int lenFile;
-	private ArrayList records = new ArrayList<>();
 
+	private int lenFile;
 
 	private Hashtable<Integer, String> CustomerName = new Hashtable<>();
 	private Hashtable<Integer, Integer> CustomerAge = new Hashtable<>();
@@ -26,9 +20,9 @@ public class LoadData {
 	private Hashtable<Integer, Integer> PurchaseId = new Hashtable<>();
 
 	private Hashtable<String, Hashtable<Integer, ?>> Columns = new Hashtable<>();
-	
-	private String[]  columnsnames = {"CustomerName","CustomerAge","CustomerId",
-			"ProductId","ProductName","ProductPrice","PurchaseId" };
+
+	private String[] columnsnames = { "CustomerName", "CustomerAge", "CustomerId", "ProductId", "ProductName",
+			"ProductPrice", "PurchaseId" };
 
 	public LoadData(String fileName, int lenFile) {
 		this.FileName = fileName;
@@ -41,63 +35,44 @@ public class LoadData {
 		Columns.put("ProductName", ProductName);
 		Columns.put("ProductPrice", ProductPrice);
 		Columns.put("PurchaseId", PurchaseId);
-				
+
 	}
-	
-	
+
 	public void read() {
-	
-	try (BufferedReader br = new BufferedReader(new FileReader(this.FileName))) {
-	    String line;
-	    int i =0 ;
-	    while ((line = br.readLine()) != null) {
-	    	
-	    	if(i>=1) {
-	    	String[] values = line.split(",");
-	        int id = Integer.parseInt(values[0]);
-	        int age = Integer.parseInt(values[2]);
-	        int pdid = Integer.parseInt(values[3]);
-	        float pdprice = Float.parseFloat(values[5]);
-	        int purch = Integer.parseInt(values[6]);
-	        
-	        CustomerId.put(i,id);
-	        CustomerName.put(i, values[1]);
-	        CustomerAge.put(i, age);
-	        ProductId.put(i, pdid);
-	        ProductName.put(i, values[4]);
-	        ProductPrice.put(i, pdprice);
-	        PurchaseId.put(i, purch); 
-	      
-	        
-	        records.add(Arrays.asList(values));
-	    	}
-	          i++;
-	    }
-	    
-	    
-	    /*Enumeration e = Columns.keys();
-	    while(e.hasMoreElements())
-	        System.out.println(Columns.get(e.nextElement()));*/
-	    
-	    
-	 	}catch(IOException ex) {
-	 		ex.printStackTrace();
-	 	}
-	
+
+		try (BufferedReader br = new BufferedReader(new FileReader(this.FileName))) {
+			String line;
+			int i = 0;
+			while ((line = br.readLine()) != null) {
+
+				if (i >= 1) {
+					String[] values = line.split(",");
+					int id = Integer.parseInt(values[0]);
+					int age = Integer.parseInt(values[2]);
+					int pdid = Integer.parseInt(values[3]);
+					float pdprice = Float.parseFloat(values[5]);
+					int purch = Integer.parseInt(values[6]);
+
+					CustomerId.put(i, id);
+					CustomerName.put(i, values[1]);
+					CustomerAge.put(i, age);
+					ProductId.put(i, pdid);
+					ProductName.put(i, values[4]);
+					ProductPrice.put(i, pdprice);
+					PurchaseId.put(i, purch);
+				}
+				i++;
+			}
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
 	}
 
-
-
-	
-
-	
 	public String[] GetColumnsName() {
-		return this.columnsnames; 
+		return this.columnsnames;
 	}
-	
-	
-
-	
 
 	public float[] readPrices() {
 		float[] customerPrice = new float[lenFile];
@@ -107,7 +82,7 @@ public class LoadData {
 			while ((line = br.readLine()) != null) {
 				if (i >= 1) {
 					String[] values = line.split(",");
-					customerPrice[i-1] = Float.parseFloat(values[1]);
+					customerPrice[i - 1] = Float.parseFloat(values[1]);
 				}
 				i++;
 			}
@@ -120,19 +95,6 @@ public class LoadData {
 
 	public Hashtable<String, Hashtable<Integer, ?>> GetColumns() {
 		return this.Columns;
-	}
-
-
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		LoadData RData = new LoadData("src/dataset/dataset_100.csv", 100);
-
-		RData.read();
-		ArrayList<Integer> tab = new ArrayList<Integer>();
-		Hashtable<String, Hashtable<Integer, ?>> cl = RData.GetColumns();
-
-		tab = new ArrayList(cl.get("CustomerId").values());
-
 	}
 
 }

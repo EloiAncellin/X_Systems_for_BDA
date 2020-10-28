@@ -15,7 +15,7 @@ public class SingleThread extends Combination {
 	}
 
 	// SELECTION : Multi Key Binary Search
-	// PROJECTION :
+	// PROJECTION : Hashing based projection 
 	// AGGREGATION :
 	public void start_combination() {
 
@@ -29,6 +29,7 @@ public class SingleThread extends Combination {
 		}
 
 		// ***** PROJECTION ***** //
+		
 
 		// ***** AGGREGATION ***** //
 	}

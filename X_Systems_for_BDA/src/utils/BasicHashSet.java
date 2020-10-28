@@ -5,178 +5,167 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class BasicHashSet implements BasicSet {
-	
+
 	private Entry[] buckets;
-    private int size;
-    
-    public BasicHashSet(int capacity) {
+	private int size;
 
-        buckets = new Entry[capacity];
-        size = 0;
-    }
-    
-    // hash function that computes the index into the bucket array giving the hash value of an object
-    private int hashFunction(int hashCode) {
+	public BasicHashSet(int capacity) {
 
-        int index = hashCode;
-        if (index < 0) { index = -index; }
-        return index % buckets.length;
-    }
-    
-    @Override
-    public boolean add(Object element) {
+		buckets = new Entry[capacity];
+		size = 0;
+	}
 
-        int index = hashFunction(element.hashCode());
-        Entry current = buckets[index];
+	// hash function that computes the index into the bucket array giving the hash
+	// value of an object
+	private int hashFunction(int hashCode) {
 
-        while (current != null) {
-            // element is already in set
-            if (current.key.equals(element)) { return false; }
-            // otherwise visit next entry in the bucket
-            current = current.next;
-        }
-        
-        // no element found so add new entry
-        Entry newentry = new Entry();
-        newentry.key = element;
-        // current Entry is null if bucket is empty
-        // if it is not null it becomes next Entry
-        newentry.next  = buckets[index];
-        buckets[index] = newentry;
-        size++;
-        return true;
-    }
-    
-    @Override
-    public boolean contains(Object element) {
+		int index = hashCode;
+		if (index < 0) {
+			index = -index;
+		}
+		return index % buckets.length;
+	}
 
-        int index = hashFunction(element.hashCode());
-        Entry current = buckets[index];
+	@Override
+	public boolean add(Object element) {
 
-        while (current != null) {
-            // check if node contains element
-            if (current.key.equals(element)) { return true; }
-            // otherwise visit next node in the bucket
-            current = current.next;
-        }
-        // no element found
-        return false;
-    }
-    
-    @Override
-    public Iterator iterator() {
-        return new BasicHashSetIterator();
-    }
-    public int get_size() {
-        return size;
-    }
-    
-    public ArrayList toList(){
-    	ArrayList myList = new ArrayList();
-    	Entry currentEntry = null;
-    	   for (int index=0; index < buckets.length; index++) {
-               // we have an entry
-               if (buckets[index] != null) {
-                   currentEntry = buckets[index];
-                   myList.add(currentEntry.key.toString());
-               }
-           }
-    	   return myList; 
-    	
-    }
-    
-    
-    
-    
-    
+		int index = hashFunction(element.hashCode());
+		Entry current = buckets[index];
 
+		while (current != null) {
+			// element is already in set
+			if (current.key.equals(element)) {
+				return false;
+			}
+			// otherwise visit next entry in the bucket
+			current = current.next;
+		}
 
-	
-    
-    //inner to build linked list of collided objects
+		// no element found so add new entry
+		Entry newentry = new Entry();
+		newentry.key = element;
+		// current Entry is null if bucket is empty
+		// if it is not null it becomes next Entry
+		newentry.next = buckets[index];
+		buckets[index] = newentry;
+		size++;
+		return true;
+	}
+
+	@Override
+	public boolean contains(Object element) {
+
+		int index = hashFunction(element.hashCode());
+		Entry current = buckets[index];
+
+		while (current != null) {
+			// check if node contains element
+			if (current.key.equals(element)) {
+				return true;
+			}
+			// otherwise visit next node in the bucket
+			current = current.next;
+		}
+		// no element found
+		return false;
+	}
+
+	@Override
+	public Iterator<?> iterator() {
+		return new BasicHashSetIterator();
+	}
+
+	public int get_size() {
+		return size;
+	}
+
+	public ArrayList<String> toList() {
+		ArrayList<String> myList = new ArrayList<>();
+		Entry currentEntry = null;
+		for (int index = 0; index < buckets.length; index++) {
+			// we have an entry
+			if (buckets[index] != null) {
+				currentEntry = buckets[index];
+				myList.add(currentEntry.key.toString());
+			}
+		}
+		return myList;
+
+	}
+
+	// inner to build linked list of collided objects
 	private static class Entry {
-        Object key;
-        Entry next;
-    }
-	
-	
-	
-	
-	
-	
-	
-	// Simple Iterator for this class 
-	class BasicHashSetIterator implements Iterator {
+		Object key;
+		Entry next;
+	}
 
-        private int currentBucket;
-        private int previousBucket;
-        private Entry currentEntry;
-        private Entry previousEntry;
+	// Simple Iterator for this class
+	class BasicHashSetIterator implements Iterator<Object> {
 
-        public BasicHashSetIterator() {
-            currentEntry = null;
-            previousEntry = null;
-            currentBucket = -1;
-            previousBucket = -1;
-        }
+		private int currentBucket;
+		private Entry currentEntry;
 
-        @Override
-        public boolean hasNext() {
+		public BasicHashSetIterator() {
+			currentEntry = null;
+			currentBucket = -1;
 
-            // currentEntry node has next
-            if (currentEntry != null && currentEntry.next != null) { return true; }
+		}
 
-            // there are still nodes
-            for (int index = currentBucket+1; index < buckets.length; index++) {
-                if (buckets[index] != null) { return true; }
-            }
+		@Override
+		public boolean hasNext() {
 
-            // nothing left
-            return false;
-        }
+			// currentEntry node has next
+			if (currentEntry != null && currentEntry.next != null) {
+				return true;
+			}
 
-        @Override
-        public Object next() {
+			// there are still nodes
+			for (int index = currentBucket + 1; index < buckets.length; index++) {
+				if (buckets[index] != null) {
+					return true;
+				}
+			}
 
-            previousEntry = currentEntry;
-            previousBucket = currentBucket;
+			// nothing left
+			return false;
+		}
 
-            // if either the current or next node are null
-            if (currentEntry == null || currentEntry.next == null) {
+		@Override
+		public Object next() {
 
-                // go to next bucket
-                currentBucket++;
+			// if either the current or next node are null
+			if (currentEntry == null || currentEntry.next == null) {
 
-                // keep going until you find a bucket with a node
-                while (currentBucket < buckets.length &&
-                        buckets[currentBucket] == null) {
-                    // go to next bucket
-                    currentBucket++;
-                }
+				// go to next bucket
+				currentBucket++;
 
-                // if bucket array index still in bounds
-                // make it the current node
-                if (currentBucket < buckets.length) {
-                    currentEntry = buckets[currentBucket];
-                }
-                // otherwise there are no more elements
-                else {
-                    throw new NoSuchElementException();
-                }
-            }
-            // go to the next element in bucket
-            else {
+				// keep going until you find a bucket with a node
+				while (currentBucket < buckets.length && buckets[currentBucket] == null) {
+					// go to next bucket
+					currentBucket++;
+				}
 
-                currentEntry = currentEntry.next;
-            }
+				// if bucket array index still in bounds
+				// make it the current node
+				if (currentBucket < buckets.length) {
+					currentEntry = buckets[currentBucket];
+				}
+				// otherwise there are no more elements
+				else {
+					throw new NoSuchElementException();
+				}
+			}
+			// go to the next element in bucket
+			else {
 
-            // return the element in the current node
-            return currentEntry.key;
+				currentEntry = currentEntry.next;
+			}
 
-        }
+			// return the element in the current node
+			return currentEntry.key;
 
-    }
-	
-	
+		}
+
+	}
 
 }
