@@ -10,6 +10,7 @@ public class MultiThreadProjection implements Runnable {
 		Boolean distinct;
 		private int last;
 		private int part; 
+		private  ArrayList<BasicHashSet> result;
 		
 		public MultiThreadProjection(ArrayList<Integer> id, String[] columns, Boolean distinct,Hashtable<String,Hashtable<Integer,?>> hcl,
 				String[] allcolnames, int part ,int last) {
@@ -23,12 +24,17 @@ public class MultiThreadProjection implements Runnable {
 		
 		
 		
-		public void run() {
+		public  void run() {
 			int first = part * (last/4);
 			last = (part+1) * (last/4)-1;
-			List<Integer> sub = this.id.subList(first ,last);
-			Projection.MultiThreadProject(new ArrayList<Integer>(sub),this.cl,this.distinct);
+			List<Integer> sub = this.id.subList(first ,last+1);
+			this.result = Projection.MultiThreadProject(new ArrayList<Integer>(sub),this.cl,this.distinct);
 			
+			
+		}
+		
+		public  ArrayList<BasicHashSet> getresult(){
+			return this.result;
 		}
 		
 		/*public static void main(String[] args) {

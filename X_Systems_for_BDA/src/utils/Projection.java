@@ -16,7 +16,7 @@ public class Projection {
 
 		for (String s : allcolnames) {
 			hashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
-
+			
 		}
 
 	}
@@ -27,14 +27,18 @@ public class Projection {
 			
 
 			for (String j : colnames) {
+				
 				for (int i : index) {
+				    
 					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
-
+						
 					/*
 					 * if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
 					 * id.remove(i); }
 					 */
+					
 				}
+				
 				outputsColumnsElements.add(hashSetColumns.get(j));
 
 			}
@@ -42,9 +46,11 @@ public class Projection {
 			
 
 			
-			  for (int k = 0; k < outputsColumnsElements.size(); k++) { Iterator<?> it =
-			  outputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
-			  System.out.println(it.next()); } }
+			  for (int k = 0; k < outputsColumnsElements.size(); k++) { 
+				  Iterator<?> it =outputsColumnsElements.get(k).iterator(); 
+				  while (it.hasNext()) {
+			       System.out.println(it.next()); } 
+				  }
 			 
 
 		} /*
@@ -60,6 +66,10 @@ public class Projection {
 			 * }
 			 */
 		return outputsColumnsElements; 
+	}
+	
+	public Hashtable<String, BasicHashSet> getMTProjection(){
+		return hashSetColumns;
 	}
 
 	public void Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {

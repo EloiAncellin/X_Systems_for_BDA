@@ -10,8 +10,8 @@ import utils.Projection;
 public class SingleThread extends Combination {
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
-	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames) {
-		super(filename, lenFile, distinct, keys,colnames);
+	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads) {
+		super(filename, lenFile, distinct, keys,colnames,nbThreads);
 	}
 
 	// SELECTION : Multi Key Binary Search

@@ -2,19 +2,24 @@ package combination_1;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import combination.Combination;
 import utils.BasicHashSet;
 import utils.BinarySearchMultiThread;
 import utils.MultiThreadProjection;
+import utils.Projection;
 
 public class MultiThread extends Combination {
 	private int part = 0;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
-	private ArrayList<BasicHashSet> projection = new ArrayList<BasicHashSet>(); 
+	// private ArrayList<BasicHashSet> projection = new ArrayList<BasicHashSet>();
+	Hashtable<String, ArrayList<?>> projection = new Hashtable<>();
+	private Projection prj;
 
-	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys,String [] colnames,int nbThreads) {
-		super(filename, lenFile, distinct, keys,colnames,nbThreads);
+	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
+			int nbThreads) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
 	// SELECTION : Multi Key Binary Search
@@ -37,43 +42,48 @@ public class MultiThread extends Combination {
 			}
 			for (int i = 0; i < super.getNbThreads(); i++) {
 				myThreads[i].join();
+				System.out.println(super.getNbThreads());
 				if (myBSMT[i].getResult() != -1) {
 					addSelection(myBSMT[i].getResult());
 				}
 			}
 			part = 0;
 		}
-
+		System.out.println("flor" + selection.size());
 		// ***** PROJECTION ***** //
-		Hashtable<String, Hashtable<Integer, ?>> cl = super.getLoadData().GetColumns();
-		String[] All_col_names = super.getLoadData().GetColumnsName();
+		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
 		MultiThreadProjection myPMT[] = new MultiThreadProjection[super.getNbThreads()];
-		part = 0; 
-		for(int i =0 ; i<super.getNbThreads();i++) {
-			myPMT[i] = new MultiThreadProjection(selection,super.getColnames(),super.getDistinct(),super.getLoadData().GetColumns(),super.getLoadData().GetColumnsName(),part,selection.size()); 
-		    myThreads[i] = new Thread(myPMT[i]);
-		    myThreads[i].start();
-			part ++;
+		part = 0;
+		for (int i = 0; i < super.getNbThreads(); i++) {
+
+			myPMT[i] = new MultiThreadProjection(selection, super.getColnames(), super.getDistinct(),
+					super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName(), part, selection.size());
+			myThreads[i] = new Thread(myPMT[i]);
+			myThreads[i].start();
+			part++;
 		}
-			
+
 		for (int j = 0; j < super.getNbThreads(); j++) {
-			myThreads[j].join();	
+			myThreads[j].join();
+		
 		}
-			
-			
-		
-		//Thread T1 = new Thread( new MultiThreadProjection(new ArrayList(tab.subList(0, 50)),col,true,cl,All_col_names));
-		
-		
-		
-		
+		getProjection();
 
 		// ***** AGGREGATION ***** //
 	}
 
 	public void addSelection(int result) {
-		System.out.println(result+1);
-		this.selection.add(result+1);
+		System.out.println(result + 1);
+		this.selection.add(result + 1);
+	}
+
+	public void getProjection() {
+		Hashtable<String, BasicHashSet> result;
+		result = prj.getMTProjection();
+		for (String s : super.getColnames()) {
+			System.out.println(result.get(s).toList());
+		}
+
 	}
 
 }
