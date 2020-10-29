@@ -1,7 +1,7 @@
 package main_runner;
 
 
-import combination_2.SingleThread;
+import combination_3.SingleThread;
 import combination_2.MultiThread;
 public class main {
 
@@ -11,11 +11,12 @@ public class main {
 		String [] colnames = {"CustomerAge","CustomerName"}; 
 		int nbThreads = 4; 
 
-		SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);		
-		st.start_combination();
-		//MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
-		//mt.start_combination();
+	//	SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);		
+	  //  st.start_combination();
+		MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
+		mt.start_combination();
 
 		
 	}
+	
 }

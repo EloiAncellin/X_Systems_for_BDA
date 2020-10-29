@@ -1,9 +1,11 @@
 package combination_3;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import combination.Combination;
 import utils.MilanMultiKeyBinarySearch;
+import utils.Projection;
 
 
 public class SingleThread extends Combination{
@@ -19,14 +21,22 @@ public class SingleThread extends Combination{
 	// PROJECTION :
 	// AGGREGATION :
 	public void start_combination() {
-
+		System.out.println("Debut :"+System.nanoTime());
+		getLoadData().read();
+		System.out.println("Read :"+System.nanoTime());
 		// ***** SELECTION ***** //
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
 		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0, getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
 		setSelection(mmkbs.getResults());
 
 		// ***** PROJECTION ***** //
-
+		Hashtable<String, Hashtable<Integer, ?>> cl = super.getLoadData().GetColumns();
+		String[] All_col_names = super.getLoadData().GetColumnsName();
+		
+		Projection prj = new Projection(cl, All_col_names);
+		
+		prj.Project_sort(selection,super.getColnames(),super.getDistinct());
+		System.out.println("Projection :"+System.nanoTime());
 		// ***** AGGREGATION ***** //
 	}
 
