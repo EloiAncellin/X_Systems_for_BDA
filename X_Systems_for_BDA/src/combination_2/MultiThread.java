@@ -98,5 +98,7 @@ public class MultiThread extends Combination {
 		
 
 	}
+	//public static void main(String[] args) throws InterruptedException {}
+	
 
 }

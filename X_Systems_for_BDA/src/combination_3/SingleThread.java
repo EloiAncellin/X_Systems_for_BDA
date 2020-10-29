@@ -38,4 +38,5 @@ public class SingleThread extends Combination{
 		this.selection = results;
 	}
 
+	
 }

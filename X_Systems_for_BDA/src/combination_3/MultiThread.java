@@ -47,5 +47,6 @@ public class MultiThread extends Combination {
 	public void addSelection(ArrayList<Integer> selection) {
 		this.selection.addAll(selection);
 	}
+	
 
 }
