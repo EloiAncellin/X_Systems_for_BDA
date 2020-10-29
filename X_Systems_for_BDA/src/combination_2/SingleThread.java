@@ -9,8 +9,9 @@ public class SingleThread extends Combination {
 
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 
-	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys) {
-		super(filename, lenFile, distinct, keys);
+	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
+			int nbThreads) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
 	// SELECTION : Milan Multi Key Binary Search

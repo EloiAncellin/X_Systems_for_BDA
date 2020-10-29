@@ -25,7 +25,7 @@ public class BinarySearch {
 		return -1;
 	}
 
-	public static int[] binarySearchForMkbs(float[] data, int first, int last, double key) {
+	public static int[] binarySearchForMkbs(double[] data, int first, int last, double key) {
 		int[] result = new int[2];
 
 		int mid = middle(first, last);

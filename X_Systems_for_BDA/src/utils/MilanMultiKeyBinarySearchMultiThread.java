@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
-	float[] data;
+	double[] data;
 	int last;
 	double[] keys;
 	int part;
 	ArrayList<Integer> results;
 	
-	public MilanMultiKeyBinarySearchMultiThread(float[] data, double[] keys, int last,  int part) {
+	public MilanMultiKeyBinarySearchMultiThread(double[] data, double[] keys, int last,  int part) {
 		this.data = data;
 		this.last = last;
 		this.keys = keys;
@@ -22,7 +22,7 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	public void run() {
 		int first = part * (last/4);
 		last = (part+1) * (last/4)-1;
-		float[] sub = subArray(data, first , last);
+		double[] sub = subArray(data, first , last);
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
 		mmkbs.milanMultiKeyBinarySearch(sub, 0, sub.length -1 , keys, 0, keys.length-1);
 		this.setResults(mmkbs.getResults());
@@ -30,7 +30,7 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
 	// Generic function to get sub-array of a non-primitive array
 	// between specified indices
-	public static<T> float[] subArray(float[] data, int beg, int end) {
+	public static<T> double[] subArray(double[] data, int beg, int end) {
 		return Arrays.copyOfRange(data, beg, end + 1);
 	}
 
