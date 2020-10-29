@@ -12,7 +12,7 @@ public class main {
 		int nbThreads = 4; 
 		//SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames);		
 		//st.start_combination();
-		MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
+		MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, false,keys,colnames,nbThreads);
 		mt.start_combination();
 		
 	}

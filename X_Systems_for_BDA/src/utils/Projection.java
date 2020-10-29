@@ -9,70 +9,58 @@ public class Projection {
 
 	private static volatile Hashtable<String, Hashtable<Integer, ?>> columns = new Hashtable<>();
 	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
-
+    private static volatile Hashtable<String, Hashtable<Integer, ?>> result = new Hashtable<String, Hashtable<Integer, ?>>();
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
 
 		columns = cl;
 
 		for (String s : allcolnames) {
 			hashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
-			
+
 		}
 
 	}
 
-	public synchronized static ArrayList<BasicHashSet> MultiThreadProject(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
-		ArrayList<BasicHashSet> outputsColumnsElements = new ArrayList<BasicHashSet>();
+	public synchronized static void  MultiThreadProject(ArrayList<Integer> index,
+			String[] colnames, Boolean distinct) {
+		
 		if (distinct == true) {
-			
-
 			for (String j : colnames) {
-				
 				for (int i : index) {
-				    
+
 					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
-						
-					/*
-					 * if(elements.contains(((Hashtable)this.Columns.get(j)).get(id.get(i)))) {
-					 * id.remove(i); }
-					 */
-					
 				}
-				
-				outputsColumnsElements.add(hashSetColumns.get(j));
-
 			}
-			
-			
 
-			
-
-			  /*for (int k = 0; k < outputsColumnsElements.size(); k++) { 
-				  Iterator<?> it =outputsColumnsElements.get(k).iterator(); 
-				  while (it.hasNext()) {
-			       System.out.println(it.next()); } 
-				  }*/
-
-			 
-
-		} /*
-			 * else {
-			 * 
-			 * for (String i : colnames) { System.out.print(i + " | "); }
-			 * System.out.println(); for (int i : index) { for (String j : colnames) {
-			 * System.out.print(((Hashtable) columns.get(j)).get(i) + " | "); }
-			 * System.out.println();
-			 * 
-			 * }
-			 * 
-			 * }
+			/*
+			 * for (int k = 0; k < outputsColumnsElements.size(); k++) { Iterator<?> it
+			 * =outputsColumnsElements.get(k).iterator(); while (it.hasNext()) {
+			 * System.out.println(it.next()); } }
 			 */
-		return outputsColumnsElements; 
+
+		} else {
+
+			// for (String i : colnames) { System.out.print(i + " | "); }
+			// System.out.println();
+				for (String j : colnames) {
+					result.put(j,(Hashtable<Integer,?>) columns.get(j));
+					//System.out.print(((Hashtable) columns.get(j)).get(i) + " | ");
+				}
+
+		}
+		
+
 	}
-	
-	public Hashtable<String, BasicHashSet> getMTProjection(){
+
+	public Hashtable<String, BasicHashSet> getMTProjectionDistinct() {
+		
 		return hashSetColumns;
 	}
+	public Hashtable<String, Hashtable<Integer, ?>> getMTProjection() {
+		
+		return result; 
+	}
+	
 
 	public void Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
 
@@ -104,7 +92,7 @@ public class Projection {
 				System.out.print(i + " | ");
 			}
 			System.out.println();
-			
+
 			for (int i : index) {
 				for (String j : colnames) {
 					System.out.print(((Hashtable<Integer, ?>) columns.get(j)).get(i) + " | ");

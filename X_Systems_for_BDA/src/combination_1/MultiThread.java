@@ -2,7 +2,7 @@ package combination_1;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
+
 
 import combination.Combination;
 import utils.BasicHashSet;
@@ -76,11 +76,22 @@ public class MultiThread extends Combination {
 	}
 
 	public void getProjection() {
+		if(super.getDistinct()) {
 		Hashtable<String, BasicHashSet> result;
-		result = prj.getMTProjection();
+		result = prj.getMTProjectionDistinct();
 		for (String s : super.getColnames()) {
 			System.out.println(result.get(s).toList());
+			projection.put(s,result.get(s).toList());
+			}
 		}
+		else {
+			for (String s : super.getColnames()) {
+				projection.put(s,new ArrayList<>(super.getLoadData().GetColumns().get(s).values()));
+				System.out.println(projection.get(s));
+				}
+		  
+		}
+		
 
 	}
 
