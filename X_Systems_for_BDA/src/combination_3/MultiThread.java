@@ -27,7 +27,7 @@ public class MultiThread extends Combination {
 
 		for (int i = 0; i < nbThreads; i++) {
 			mmkbsmt[i] = new MilanMultiKeyBinarySearchMultiThread(getLoadData().getCustomerPrice(), getKeys(),
-					getLoadData().getCustomerPrice().length, part);
+					getLoadData().getCustomerPrice().length, part, getLenFile());
 			myThreads[i] = new Thread(mmkbsmt[i]);
 			myThreads[i].start();
 			part++;

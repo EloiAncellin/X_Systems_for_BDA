@@ -9,13 +9,15 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	int last;
 	double[] keys;
 	int part;
-	ArrayList<Integer> results;
+	ArrayList<Integer> results = new ArrayList<>();
+	private int lenFile;
 	
-	public MilanMultiKeyBinarySearchMultiThread(double[] data, double[] keys, int last,  int part) {
+	public MilanMultiKeyBinarySearchMultiThread(double[] data, double[] keys, int last,  int part, int lenFile) {
 		this.data = data;
 		this.last = last;
 		this.keys = keys;
 		this.part = part;
+		this.lenFile = lenFile;
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class MilanMultiKeyBinarySearchMultiThread implements Runnable {
 	
 	public void setResults(ArrayList<Integer> results) {
 		for(int i =0; i<results.size() ; i ++) {
-			this.results.add(results.get(i)+ part*4);
+			this.results.add(results.get(i) + part*(lenFile/4));
 		}
 	}
 

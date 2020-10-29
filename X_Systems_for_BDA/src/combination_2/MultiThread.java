@@ -20,14 +20,14 @@ public class MultiThread extends Combination {
 	// PROJECTION :
 	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
-
+		getLoadData().read();
 		// ***** SELECTION *****//
 		Thread myThreads[] = new Thread[4];
 		MilanMultiKeyBinarySearchMultiThread mmkbsmt[] = new MilanMultiKeyBinarySearchMultiThread[4];
 
 		for (int i = 0; i < nbThreads; i++) {
 			mmkbsmt[i] = new MilanMultiKeyBinarySearchMultiThread(getLoadData().getCustomerPrice(), getKeys(),
-					getLoadData().getCustomerPrice().length, part);
+					getLoadData().getCustomerPrice().length, part, getLenFile());
 			myThreads[i] = new Thread(mmkbsmt[i]);
 			myThreads[i].start();
 			part++;

@@ -9,6 +9,7 @@ public abstract class Combination {
 	private LoadData loadData;
 	private String [] colnames;  
 	private int nbThreads;
+	private int lenFile;
 
 	public Combination(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads) {
 		this.distinct = distinct;
@@ -16,6 +17,7 @@ public abstract class Combination {
 		this.loadData = new LoadData(filename, lenFile);
 		this.colnames = colnames;
 		this.nbThreads = nbThreads;
+		this.lenFile =lenFile;
 	}
 	
 	public abstract void start_combination() throws InterruptedException;
@@ -34,6 +36,10 @@ public abstract class Combination {
 	
 	public String[] getColnames() {
 		return this.colnames;
+	}
+	
+	public int getLenFile () {
+		return this.lenFile;
 	}
 	
 	public int getNbThreads() {
