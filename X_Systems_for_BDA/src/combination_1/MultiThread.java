@@ -42,14 +42,13 @@ public class MultiThread extends Combination {
 			}
 			for (int i = 0; i < super.getNbThreads(); i++) {
 				myThreads[i].join();
-				System.out.println(super.getNbThreads());
 				if (myBSMT[i].getResult() != -1) {
 					addSelection(myBSMT[i].getResult());
 				}
 			}
 			part = 0;
 		}
-		System.out.println("flor" + selection.size());
+		
 		// ***** PROJECTION ***** //
 		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
 		MultiThreadProjection myPMT[] = new MultiThreadProjection[super.getNbThreads()];
@@ -73,7 +72,6 @@ public class MultiThread extends Combination {
 	}
 
 	public void addSelection(int result) {
-		System.out.println(result + 1);
 		this.selection.add(result + 1);
 	}
 

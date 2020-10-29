@@ -41,7 +41,6 @@ public class SingleThread extends Combination {
 	public void addSelection(int result) {
 		if (result != -1) {
 			this.selection.add(result + 1);
-			System.out.println(result+1);
 		}
 	}
 

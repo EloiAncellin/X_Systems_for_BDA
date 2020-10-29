@@ -46,11 +46,11 @@ public class Projection {
 			
 
 			
-			  for (int k = 0; k < outputsColumnsElements.size(); k++) { 
+			  /*for (int k = 0; k < outputsColumnsElements.size(); k++) { 
 				  Iterator<?> it =outputsColumnsElements.get(k).iterator(); 
 				  while (it.hasNext()) {
 			       System.out.println(it.next()); } 
-				  }
+				  }*/
 			 
 
 		} /*
