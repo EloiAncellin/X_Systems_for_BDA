@@ -19,12 +19,15 @@ public class SingleThread extends Combination {
 	// AGGREGATION :
 	public void start_combination() {
 		
+		System.out.println("Debut :"+System.nanoTime());
 		getLoadData().read();
+		System.out.println("Read :"+System.nanoTime());
 		// ***** SELECTION ***** //
 		for (int i = 0; i < getKeys().length; i++) {
 			addSelection(BinarySearch.binarySearch(getLoadData().getCustomerPrice(), 0,
 					getLoadData().getCustomerPrice().length - 1, getKeys()[i]));
 		}
+		System.out.println("Selection :"+System.nanoTime());
 
 		// ***** PROJECTION ***** //
 		
@@ -35,7 +38,9 @@ public class SingleThread extends Combination {
 		Projection prj = new Projection(cl, All_col_names);
 		
 		prj.Project(selection,super.getColnames(),super.getDistinct());
+		System.out.println("Projection:"+System.nanoTime());
 		// ***** AGGREGATION ***** //
+		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
 	public void addSelection(int result) {

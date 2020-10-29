@@ -13,7 +13,6 @@ import utils.Projection;
 public class MultiThread extends Combination {
 	private int part = 0;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
-	// private ArrayList<BasicHashSet> projection = new ArrayList<BasicHashSet>();
 	Hashtable<String, ArrayList<?>> projection = new Hashtable<>();
 	private Projection prj;
 
@@ -26,8 +25,11 @@ public class MultiThread extends Combination {
 	// PROJECTION :
 	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
-
+		
+		System.out.println("Debut :"+System.nanoTime());
 		getLoadData().read();
+		System.out.println("Read :"+System.nanoTime());
+		
 		// ***** SELECTION ***** //
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[super.getNbThreads()];
 		Thread myThreads[] = new Thread[super.getNbThreads()];
@@ -48,7 +50,7 @@ public class MultiThread extends Combination {
 			}
 			part = 0;
 		}
-		
+		System.out.println("Selection :"+System.nanoTime());
 		// ***** PROJECTION ***** //
 		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
 		MultiThreadProjection myPMT[] = new MultiThreadProjection[super.getNbThreads()];
@@ -66,9 +68,12 @@ public class MultiThread extends Combination {
 			myThreads[j].join();
 		
 		}
+		
 		getProjection();
+		System.out.println("Projection :"+System.nanoTime());
 
 		// ***** AGGREGATION ***** //
+		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
 	public void addSelection(int result) {
