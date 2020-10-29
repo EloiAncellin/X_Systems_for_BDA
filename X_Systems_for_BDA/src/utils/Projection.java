@@ -2,14 +2,14 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Projection {
 
 	private static volatile Hashtable<String, Hashtable<Integer, ?>> columns = new Hashtable<>();
 	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
-    private static volatile Hashtable<String, Hashtable<Integer, ?>> result = new Hashtable<String, Hashtable<Integer, ?>>();
+    private static volatile Hashtable<String, ArrayList<?>> resultMT = new  Hashtable<String, ArrayList<?>>() ;
+    private Hashtable<String, ArrayList<?>> resultST = new Hashtable<>(); 
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
 
 		columns = cl;
@@ -21,7 +21,7 @@ public class Projection {
 
 	}
 
-	public synchronized static void  MultiThreadProject(ArrayList<Integer> index,
+	public synchronized static Hashtable<String, ArrayList<?>>  MultiThreadProject(ArrayList<Integer> index,
 			String[] colnames, Boolean distinct) {
 		
 		if (distinct == true) {
@@ -37,12 +37,20 @@ public class Projection {
 
 			// for (String i : colnames) { System.out.print(i + " | "); }
 			// System.out.println();
-				for (String j : colnames) {
-					result.put(j,(Hashtable<Integer,?>) columns.get(j));
-					//System.out.print(((Hashtable) columns.get(j)).get(i) + " | ");
+
+			for (String j : colnames) {
+				ArrayList tab = new ArrayList<>(); 
+				for (int i : index) {
+					tab.add(columns.get(j).get(i));
+					if(!resultMT.containsKey(j)) {
+						resultMT.put(j,new ArrayList<>());
+					}
 				}
+				resultMT.get(j).addAll(tab);
+			}
 
 		}
+		return resultMT; 
 		
 
 	}
@@ -51,13 +59,13 @@ public class Projection {
 		
 		return hashSetColumns;
 	}
-	public Hashtable<String, Hashtable<Integer, ?>> getMTProjection() {
+	public Hashtable<String, ArrayList<?>> getMTProjection() {
 		
-		return result; 
+		return resultMT; 
 	}
 	
 
-	public void Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
+	public Hashtable<String, ArrayList<?>> Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
 
 		if (distinct == true) {
 
@@ -71,32 +79,32 @@ public class Projection {
 
 				}
 				OutputsColumnsElements.add(elements);
+				resultST.put(j, elements.toList());
 
 			}
 
-			for (int k = 0; k < OutputsColumnsElements.size(); k++) {
+			/*for (int k = 0; k < OutputsColumnsElements.size(); k++) {
 				Iterator<?> it = OutputsColumnsElements.get(k).iterator();
 				while (it.hasNext()) {
 					System.out.println(it.next());
 				}
-			}
+			}*/
 
 		} else {
-
-			for (String i : colnames) {
-				System.out.print(i + " | ");
-			}
-			System.out.println();
-
-			for (int i : index) {
-				for (String j : colnames) {
-					System.out.print(((Hashtable<Integer, ?>) columns.get(j)).get(i) + " | ");
+			
+			for (String j : colnames) {
+				ArrayList tab = new ArrayList<>(); 
+				for (int i : index) {
+					tab.add(columns.get(j).get(i));
+					
 				}
-				System.out.println();
+				resultST.put(j,tab);
+				
 
 			}
 
 		}
+		return resultST; 
 
 	}
 

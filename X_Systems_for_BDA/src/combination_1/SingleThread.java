@@ -9,6 +9,7 @@ import utils.Projection;
 
 public class SingleThread extends Combination {
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
+	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
 	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads) {
 		super(filename, lenFile, distinct, keys,colnames,nbThreads);
@@ -37,7 +38,8 @@ public class SingleThread extends Combination {
 		
 		Projection prj = new Projection(cl, All_col_names);
 		
-		prj.Project(selection,super.getColnames(),super.getDistinct());
+		projection = prj.Project(selection,super.getColnames(),super.getDistinct());
+		System.out.println(projection);
 		System.out.println("Projection:"+System.nanoTime());
 		// ***** AGGREGATION ***** //
 		System.out.println("Aggregation :"+System.nanoTime());

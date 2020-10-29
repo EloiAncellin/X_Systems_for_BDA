@@ -73,6 +73,7 @@ public class MultiThread extends Combination {
 		System.out.println("Projection :"+System.nanoTime());
 
 		// ***** AGGREGATION ***** //
+		
 		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
@@ -90,10 +91,8 @@ public class MultiThread extends Combination {
 			}
 		}
 		else {
-			for (String s : super.getColnames()) {
-				projection.put(s,new ArrayList<>(super.getLoadData().GetColumns().get(s).values()));
-				System.out.println(projection.get(s));
-				}
+			projection = prj.getMTProjection();
+			System.out.println(projection);
 		  
 		}
 		
