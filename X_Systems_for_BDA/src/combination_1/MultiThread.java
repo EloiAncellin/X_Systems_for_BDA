@@ -86,8 +86,9 @@ public class MultiThread extends Combination {
 		Hashtable<String, BasicHashSet> result;
 		result = prj.getMTProjectionDistinct();
 		for (String s : super.getColnames()) {
-			System.out.println(result.get(s).toList());
+			//System.out.println(result.get(s).toList());
 			projection.put(s,result.get(s).toList());
+			System.out.println(projection);
 			}
 		}
 		else {
@@ -98,5 +99,6 @@ public class MultiThread extends Combination {
 		
 
 	}
+	
 
 }

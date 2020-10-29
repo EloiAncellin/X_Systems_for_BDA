@@ -89,14 +89,14 @@ public class MultiThread extends Combination {
 			}
 		}
 		else {
-			for (String s : super.getColnames()) {
-				projection.put(s,new ArrayList<>(super.getLoadData().GetColumns().get(s).values()));
-				System.out.println(projection.get(s));
-				}
+			projection = prj.getMTProjection();
+			System.out.println(projection);
 		  
 		}
 		
 
 	}
+	//public static void main(String[] args) throws InterruptedException {}
+	
 
 }
