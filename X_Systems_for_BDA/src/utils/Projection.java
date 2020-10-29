@@ -3,175 +3,165 @@ package utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Projection {
 
 	private static volatile Hashtable<String, Hashtable<Integer, ?>> columns = new Hashtable<>();
 	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
-
-    private static volatile Hashtable<String, ArrayList<?>> resultMT = new  Hashtable<String, ArrayList<?>>() ;
-    private Hashtable<String, ArrayList<?>> resultST = new Hashtable<>(); 
-
-	private static volatile Hashtable<String,ArrayList<Integer>> id_wo_duplicate = new Hashtable<String,ArrayList<Integer>>();
-
-
+	private static volatile Hashtable<String, ArrayList<?>> resultMT = new Hashtable<String, ArrayList<?>>();
+	private Hashtable<String, ArrayList<?>> resultST = new Hashtable<>();
+	private static volatile Hashtable<String, ArrayList<Integer>> id_wo_duplicate = new Hashtable<String, ArrayList<Integer>>();
+	
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
 
 		columns = cl;
 
 		for (String s : allcolnames) {
 			hashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
-			
+
 		}
 
 	}
-	
-public static Hashtable<String, Hashtable<Integer, ?>> Array_to_Hash(Hashtable<String, Hashtable<Integer, ?>> cl, ArrayList<Integer> tab,String allcolnames) {
 
-	    Hashtable<String,Hashtable<Integer,?>> colonne = new Hashtable<String,Hashtable<Integer,?>>();
-	    Hashtable<Integer,Object> temp = new Hashtable();
-	    //this.Columns = cl;
-		for (Object i :tab)
-		{ 
-		 	 
-		 		
-		 		for (Map.Entry<Integer, ?> entry : cl.get(allcolnames).entrySet()) {
-		 			if(entry.getKey() == i) {
-		 			
-		 				temp.put(entry.getKey(), entry.getValue());
-		 				colonne.put(allcolnames, temp);
-		 				
-		 			}
-		 			
-		 		}
-			
-		}	
+	public static Hashtable<String, Hashtable<Integer, ?>> Array_to_Hash(Hashtable<String, Hashtable<Integer, ?>> cl,
+			ArrayList<Integer> tab, String allcolnames) {
+
+		Hashtable<String, Hashtable<Integer, ?>> colonne = new Hashtable<String, Hashtable<Integer, ?>>();
+		Hashtable<Integer, Object> temp = new Hashtable();
+		// this.Columns = cl;
+		for (Object i : tab) {
+
+			for (Map.Entry<Integer, ?> entry : cl.get(allcolnames).entrySet()) {
+				if (entry.getKey() == i) {
+
+					temp.put(entry.getKey(), entry.getValue());
+					colonne.put(allcolnames, temp);
+
+				}
+
+			}
+
+		}
 		return colonne;
 	}
 
-	public synchronized static Hashtable<String, ArrayList<?>>  MultiThreadProject(ArrayList<Integer> index,
-			String[] colnames, Boolean distinct) { 
-		
+	public synchronized static Hashtable<String, ArrayList<?>> MultiThreadProject(ArrayList<Integer> index,
+			String[] colnames, Boolean distinct) {
+
 		if (distinct == true) {
-			
 
 			for (String j : colnames) {
-				
+
 				for (int i : index) {
-		    
+
 					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
 				}
 			}
-			
-			
+
 		}
-	
-			else {
-				
+
+		else {
+
 			for (String j : colnames) {
-				ArrayList tab = new ArrayList<>(); 
+				ArrayList tab = new ArrayList<>();
 				for (int i : index) {
 					tab.add(columns.get(j).get(i));
-					if(!resultMT.containsKey(j)) {
-						resultMT.put(j,new ArrayList<>());
+					if (!resultMT.containsKey(j)) {
+						resultMT.put(j, new ArrayList<>());
 					}
 				}
 				resultMT.get(j).addAll(tab);
 			}
 		}
-		return resultMT; 
-		
+		return resultMT;
+
 	}
 
 	public Hashtable<String, BasicHashSet> getMTProjectionDistinct() {
-		
+
 		return hashSetColumns;
 	}
+
 	public Hashtable<String, ArrayList<?>> getMTProjection() {
-		
-		return resultMT; 
+
+		return resultMT;
 	}
-
-
-	
 
 	public Hashtable<String, ArrayList<?>> Project(ArrayList<Integer> index, String[] colnames, Boolean distinct) {
 
-		if (distinct == true) {
-			int size = index.size();
-			ArrayList<BasicHashSet> OutputsColumnsElements = new ArrayList<BasicHashSet>();
+		if (distinct == true) {/*
+								 * 
+								 * int size = index.size(); ArrayList<BasicHashSet> OutputsColumnsElements = new
+								 * ArrayList<BasicHashSet>();
+								 * 
+								 * for (String j : colnames) { BasicHashSet elements = new BasicHashSet(size);
+								 * for (int i : index) { elements.add(((Hashtable<Integer, ?>)
+								 * columns.get(j)).get(i));
+								 * 
+								 * 
+								 * } OutputsColumnsElements.add(elements);
+								 * 
+								 * }
+								 * 
+								 * for (int k = 0; k < OutputsColumnsElements.size(); k++) {
+								 * 
+								 * Iterator<?> it = OutputsColumnsElements.get(k).iterator(); ArrayList tab =
+								 * new ArrayList<>(); while (it.hasNext()) { tab.add(it.next()); }
+								 * System.out.println(tab); resultST.put(colnames[k],tab);
+								 */
 
 			for (String j : colnames) {
-				BasicHashSet elements = new BasicHashSet(size);
+
 				for (int i : index) {
-					elements.add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
-					
-						
+
+					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
 				}
-				OutputsColumnsElements.add(elements);
-				
-			}
-			
-			for (int k = 0; k < OutputsColumnsElements.size(); k++) {
-				
-				Iterator<?> it = OutputsColumnsElements.get(k).iterator();
-				ArrayList tab = new ArrayList<>();
-				while (it.hasNext()) {
-					tab.add(it.next());
-				}
-				System.out.println(tab);
-				resultST.put(colnames[k],tab);
+				resultST.put(j, hashSetColumns.get(j).toList());
 			}
 
-		} else {	
-			
+		} else {
+
 			for (String j : colnames) {
-				ArrayList tab = new ArrayList<>(); 
+				ArrayList tab = new ArrayList<>();
 				for (int i : index) {
 					tab.add(columns.get(j).get(i));
 				}
-				resultST.put(j,tab);
-				
+				resultST.put(j, tab);
 
 			}
 
 		}
-		return resultST; 
+		return resultST;
 
 	}
 
-	
-    
 	public synchronized static void MultiThreadProjectsort(ArrayList<Integer> index, String[] col, Boolean distinct) {
-		
-Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
-        
-    	if (distinct == true){
-    		for (String column :col) {
-    		Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap,index,column);
-    		ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1,column);
-    		
-    		System.out.println();
-        	
-    		for( int i : tab_wo_dup) {
-    			//System.out.println(i);
-    			System.out.println(tab1.get(column).get(i)+ " | " );
-    		
-                
-    		}
-    		id_wo_duplicate.put(column, tab_wo_dup);
-    	//	System.out.println("id " + id_wo_duplicate);
-    		
-    		}
-    		
-    	}
-    	else {
-    		for (String i : col) {
-    			System.out.print(i + " | ");
-    		}
-			
+
+		Hashtable<String, Hashtable<Integer, ?>> hashmap = columns;
+
+		if (distinct == true) {
+			for (String column : col) {
+				Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap, index, column);
+				ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1, column);
+
+				System.out.println();
+
+				for (int i : tab_wo_dup) {
+					// System.out.println(i);
+					System.out.println(tab1.get(column).get(i) + " | ");
+
+				}
+				id_wo_duplicate.put(column, tab_wo_dup);
+				// System.out.println("id " + id_wo_duplicate);
+
+			}
+
+		} else {
+			for (String i : col) {
+				System.out.print(i + " | ");
+			}
+
 			System.out.println();
 			int record;
 			for (int i : index) {
@@ -183,35 +173,34 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			}
 
 		}
-		
+
 	}
-    public synchronized void Project_sort(ArrayList<Integer> index, String[] col, Boolean distinct) {
-    	Hashtable<String, Hashtable<Integer, ?>> hashmap =this.columns;
-        
-    	if (distinct == true){
-    		for (String column :col) {
-    		Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap,index,column);
-    		ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1,column);
-    		
-    		System.out.println();
-        	
-    		for( int i : tab_wo_dup) {
-    			//System.out.println(i);
-    			System.out.println(tab1.get(column).get(i)+ " | " );
-    		
-                
-    		}
-    		id_wo_duplicate.put(column, tab_wo_dup);
-    	//	System.out.println(id_wo_duplicate);
-    		
-    		}
-    		
-    	}
-    	else {
-    		for (String i : col) {
-    			System.out.print(i + " | ");
-    		}
-			
+
+	public synchronized void Project_sort(ArrayList<Integer> index, String[] col, Boolean distinct) {
+		Hashtable<String, Hashtable<Integer, ?>> hashmap = this.columns;
+
+		if (distinct == true) {
+			for (String column : col) {
+				Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap, index, column);
+				ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1, column);
+
+				System.out.println();
+
+				for (int i : tab_wo_dup) {
+					// System.out.println(i);
+					System.out.println(tab1.get(column).get(i) + " | ");
+
+				}
+				id_wo_duplicate.put(column, tab_wo_dup);
+				// System.out.println(id_wo_duplicate);
+
+			}
+
+		} else {
+			for (String i : col) {
+				System.out.print(i + " | ");
+			}
+
 			System.out.println();
 			int record;
 			for (int i : index) {
@@ -223,8 +212,8 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			}
 
 		}
-    }
-    
+	}
+
 	public static int removeDuplicateElements(String arr[], int n) {
 
 		String[] temp = new String[n];
@@ -250,12 +239,13 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return j;
 
 	}
+
 	public static int removeDuplicateElements_int(int arr[], int n) {
 
 		int[] temp = new int[n];
 		int j = 0;
 		for (int i = 0; i < n - 1; i++) {
-			if (arr[i]!=(arr[i + 1])) {
+			if (arr[i] != (arr[i + 1])) {
 
 				temp[j++] = arr[i];
 
@@ -275,16 +265,17 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return j;
 
 	}
-	
-	public Hashtable<String,ArrayList<Integer>> getid_wo_duplicate(){
+
+	public Hashtable<String, ArrayList<Integer>> getid_wo_duplicate() {
 		return this.id_wo_duplicate;
 	}
+
 	public static int removeDuplicateElements_double(double arr[], int n) {
 
 		double[] temp = new double[n];
 		int j = 0;
 		for (int i = 0; i < n - 1; i++) {
-			if (arr[i]!=(arr[i + 1])) {
+			if (arr[i] != (arr[i + 1])) {
 
 				temp[j++] = arr[i];
 
@@ -304,119 +295,116 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return j;
 
 	}
-	
-	public static ArrayList<Integer> removeDuplicateHashmap(Hashtable<String, Hashtable<Integer, ?>> tab,String attribut) {
-        
-		
+
+	public static ArrayList<Integer> removeDuplicateHashmap(Hashtable<String, Hashtable<Integer, ?>> tab,
+			String attribut) {
+
 		ArrayList<Integer> tab_id_wo_duplicate = new ArrayList<Integer>();
 		ArrayList<Object> tab_values = new ArrayList(tab.get(attribut).values());
-        if (tab_values.get(0) instanceof String) {
-		Object[] arr = tab_values.toArray(new String[tab_values.size()]);
-		String[] str = (String[]) arr;
-		int longueur = str.length;
-		
-		mergeSort(str, 0, str.length - 1);
-		
-		int longueure = removeDuplicateElements(str,longueur);
-		
-		String[] tab_wo_duplicate = new String[longueur];
-		for (int i = 0; i < longueure; i++) {
-			tab_wo_duplicate[i] = str[i];
-		}
-		for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
+		if (tab_values.get(0) instanceof String) {
+			Object[] arr = tab_values.toArray(new String[tab_values.size()]);
+			String[] str = (String[]) arr;
+			int longueur = str.length;
+
+			mergeSort(str, 0, str.length - 1);
+
+			int longueure = removeDuplicateElements(str, longueur);
+
+			String[] tab_wo_duplicate = new String[longueur];
 			for (int i = 0; i < longueure; i++) {
-				//System.out.println("tab " +tab_wo_duplicate[i]);
-				if (entry.getValue() == tab_wo_duplicate[i]) {
-				//	System.out.println("value " +tab_wo_duplicate[i]);
-					tab_id_wo_duplicate.add(entry.getKey());
-				//	System.out.println(" key "+ entry.getKey());
-					tab_wo_duplicate[i] = null;
+				tab_wo_duplicate[i] = str[i];
+			}
+			for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
+				for (int i = 0; i < longueure; i++) {
+					// System.out.println("tab " +tab_wo_duplicate[i]);
+					if (entry.getValue() == tab_wo_duplicate[i]) {
+						// System.out.println("value " +tab_wo_duplicate[i]);
+						tab_id_wo_duplicate.add(entry.getKey());
+						// System.out.println(" key "+ entry.getKey());
+						tab_wo_duplicate[i] = null;
+
+					}
 
 				}
-
 			}
 		}
-        }
-        if (tab_values.get(0) instanceof Integer) {
-    		Integer[] arr = tab_values.toArray(new Integer[tab_values.size()]);
-    	//	int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
-    		int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
-    	//	int[] str = convertListoint(arr);
-    		int longueur = str.length;
-    		
-    		sort(str, 0, str.length - 1);
-    		
-    		int longueure = removeDuplicateElements_int(str,longueur);
-    		
-    		int[] tab_wo_duplicate = new int[longueur];
-    		for (int i = 0; i < longueure; i++) {
-    			tab_wo_duplicate[i] = str[i];
-    		
-    		}
-    		for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
-    			for (int i = 0; i < longueure; i++) {
-    				
-    				if (entry.getValue().equals(tab_wo_duplicate[i])) {
-    				//	System.out.println("value " +tab_wo_duplicate[i]);
-    					tab_id_wo_duplicate.add(entry.getKey());
-    				//	System.out.println(" key "+ entry.getKey());
-    					tab_wo_duplicate[i] = 0;
+		if (tab_values.get(0) instanceof Integer) {
+			Integer[] arr = tab_values.toArray(new Integer[tab_values.size()]);
+			// int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
+			int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+			// int[] str = convertListoint(arr);
+			int longueur = str.length;
 
-    				}
+			sort(str, 0, str.length - 1);
 
-    			}
-    		}
-            }
-        if (tab_values.get(0) instanceof Double) {
-    		Double[] arr = tab_values.toArray(new Double[tab_values.size()]);
-    	//	int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
-    	//	int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
-    	//	int[] str = convertListoint(arr);
-    	//	Object[] arr = tab_values.toArray(new Float[tab_values.size()]);
-    	//	float[] str = (float[]) arr;
-        	
-        //	Float[] arr = tab_values.toArray(new Float[tab_values.size()]);
-        	//	int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
-          //  int[] str = Arrays.stream(arr).mapToFloat(Float::floatValue).toArray();
-    		
-        	double[] str = new double[arr.length];
-        	int k = 0;
-        	for (double f : arr) {
-        	  str[k++] = f;
-        	}
-        	
-        	int longueur = str.length;
-    		
-    		sort(str, 0, str.length - 1);
-    		
-    		int longueure = removeDuplicateElements_double(str,longueur);
-    		
-    		double[] tab_wo_duplicate = new double[longueur];
-    		for (int i = 0; i < longueure; i++) {
-    			tab_wo_duplicate[i] = str[i];
-    		
-    		}
-    		for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
-    			for (int i = 0; i < longueure; i++) {
-    				
-    				if (entry.getValue().equals(tab_wo_duplicate[i])) {
-    				//	System.out.println("value " +tab_wo_duplicate[i]);
-    					tab_id_wo_duplicate.add(entry.getKey());
-    				//	System.out.println(" key "+ entry.getKey());
-    					tab_wo_duplicate[i] = 0;
+			int longueure = removeDuplicateElements_int(str, longueur);
 
-    				}
+			int[] tab_wo_duplicate = new int[longueur];
+			for (int i = 0; i < longueure; i++) {
+				tab_wo_duplicate[i] = str[i];
 
-    			}
-    		}
-            }
-        
+			}
+			for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
+				for (int i = 0; i < longueure; i++) {
+
+					if (entry.getValue().equals(tab_wo_duplicate[i])) {
+						// System.out.println("value " +tab_wo_duplicate[i]);
+						tab_id_wo_duplicate.add(entry.getKey());
+						// System.out.println(" key "+ entry.getKey());
+						tab_wo_duplicate[i] = 0;
+
+					}
+
+				}
+			}
+		}
+		if (tab_values.get(0) instanceof Double) {
+			Double[] arr = tab_values.toArray(new Double[tab_values.size()]);
+			// int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
+			// int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+			// int[] str = convertListoint(arr);
+			// Object[] arr = tab_values.toArray(new Float[tab_values.size()]);
+			// float[] str = (float[]) arr;
+
+			// Float[] arr = tab_values.toArray(new Float[tab_values.size()]);
+			// int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
+			// int[] str = Arrays.stream(arr).mapToFloat(Float::floatValue).toArray();
+
+			double[] str = new double[arr.length];
+			int k = 0;
+			for (double f : arr) {
+				str[k++] = f;
+			}
+
+			int longueur = str.length;
+
+			sort(str, 0, str.length - 1);
+
+			int longueure = removeDuplicateElements_double(str, longueur);
+
+			double[] tab_wo_duplicate = new double[longueur];
+			for (int i = 0; i < longueure; i++) {
+				tab_wo_duplicate[i] = str[i];
+
+			}
+			for (Map.Entry<Integer, ?> entry : tab.get(attribut).entrySet()) {
+				for (int i = 0; i < longueure; i++) {
+
+					if (entry.getValue().equals(tab_wo_duplicate[i])) {
+						// System.out.println("value " +tab_wo_duplicate[i]);
+						tab_id_wo_duplicate.add(entry.getKey());
+						// System.out.println(" key "+ entry.getKey());
+						tab_wo_duplicate[i] = 0;
+
+					}
+
+				}
+			}
+		}
+
 		return tab_id_wo_duplicate;
 
 	}
-	
-	
-
 
 	public static void merge(int arr[], int l, int m, int r)
 
@@ -436,8 +424,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			if (L[i] <= R[j]) {
 				arr[k] = L[i];
 				i++;
-			}
-			else {
+			} else {
 				arr[k] = R[j];
 				j++;
 			}
@@ -473,6 +460,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return arr;
 
 	}
+
 	public static void merge(double arr[], int l, int m, int r)
 
 	{
@@ -491,8 +479,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			if (L[i] <= R[j]) {
 				arr[k] = L[i];
 				i++;
-			}
-			else {
+			} else {
 				arr[k] = R[j];
 				j++;
 			}
@@ -528,8 +515,6 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return arr;
 
 	}
-
-	
 
 	public static void mergeSort(String[] a, int from, int to) {
 
@@ -600,7 +585,6 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 
 	}
 
-
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		LoadData RData = new LoadData("src/dataset_sorted/dataset_sorted_100.csv", 100);
@@ -615,10 +599,9 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			tab.add(i);
 		String[] All_col_names = RData.GetColumnsName();
 		Projection prj = new Projection(cl, All_col_names);
-		String[] col = { "CustomerAge","ProductPrice" };	
-		
+		String[] col = { "CustomerAge", "ProductPrice" };
+
 		prj.Project_sort(tab, col, true);
-        System.out.println();
+		System.out.println();
 	}
 }
-
