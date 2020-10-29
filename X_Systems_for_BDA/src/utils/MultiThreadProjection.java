@@ -28,7 +28,9 @@ public class MultiThreadProjection implements Runnable {
 			int first = part * (last/4);
 			last = (part+1) * (last/4)-1;
 			List<Integer> sub = this.id.subList(first ,last+1);
+			System.out.println(sub);
 			Projection.MultiThreadProject(new ArrayList<Integer>(sub),this.cl,this.distinct);
+			
 			
 			
 		}

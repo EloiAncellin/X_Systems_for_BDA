@@ -237,7 +237,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 
 		}
     }
-
+    
 	public static int removeDuplicateElements(String arr[], int n) {
 
 		String[] temp = new String[n];
@@ -288,6 +288,10 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		return j;
 
 	}
+	
+	public Hashtable<String,ArrayList<Integer>> getid_wo_duplicate(){
+		return this.id_wo_duplicate;
+	}
 	public static int removeDuplicateElements_double(double arr[], int n) {
 
 		double[] temp = new double[n];
@@ -319,7 +323,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 		
 		ArrayList<Integer> tab_id_wo_duplicate = new ArrayList<Integer>();
 		ArrayList<Object> tab_values = new ArrayList(tab.get(attribut).values());
-        if (tab_values.get(1) instanceof String) {
+        if (tab_values.get(0) instanceof String) {
 		Object[] arr = tab_values.toArray(new String[tab_values.size()]);
 		String[] str = (String[]) arr;
 		int longueur = str.length;
@@ -346,7 +350,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
 			}
 		}
         }
-        if (tab_values.get(1) instanceof Integer) {
+        if (tab_values.get(0) instanceof Integer) {
     		Integer[] arr = tab_values.toArray(new Integer[tab_values.size()]);
     	//	int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
     		int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
@@ -376,7 +380,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
     			}
     		}
             }
-        if (tab_values.get(1) instanceof Double) {
+        if (tab_values.get(0) instanceof Double) {
     		Double[] arr = tab_values.toArray(new Double[tab_values.size()]);
     	//	int[] intArray = arr.stream(arr).mapToInt(Integer::intValue).toArray();
     	//	int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
@@ -630,3 +634,4 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
         System.out.println();
 	}
 }
+
