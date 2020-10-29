@@ -175,7 +175,7 @@ Hashtable<String, Hashtable<Integer, ?>> hashmap =columns;
                 
     		}
     		id_wo_duplicate.put(column, tab_wo_dup);
-    		System.out.println(id_wo_duplicate);
+    	//	System.out.println("id " + id_wo_duplicate);
     		
     		}
     		

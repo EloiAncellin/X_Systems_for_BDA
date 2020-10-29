@@ -9,7 +9,7 @@ public class main {
 		
 		double[] keys = {17.38,111.46,624.625,4958.22, 4964.79};
 		String [] colnames = {"CustomerAge","CustomerName"}; 
-		int nbThreads = 6; 
+		int nbThreads = 4; 
 
 	//	SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);		
 	  //  st.start_combination();
