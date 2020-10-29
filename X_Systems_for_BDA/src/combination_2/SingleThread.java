@@ -19,11 +19,8 @@ public class SingleThread extends Combination {
 	// AGGREGATION :
 	public void start_combination() {
 
+		getLoadData().read();
 		// ***** SELECTION ***** //
-
-		// Read customer price
-
-		// this.customerIdPrice =
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
 		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0,
 				getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
@@ -32,10 +29,6 @@ public class SingleThread extends Combination {
 		// ***** PROJECTION ***** //
 
 		// ***** AGGREGATION ***** //
-	}
-
-	public void addSelection(int result) {
-		this.selection.add(result);
 	}
 
 	public void setSelection(ArrayList<Integer> results) {

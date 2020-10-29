@@ -26,8 +26,9 @@ public class MilanMultiKeyBinarySearch {
 			milanMultiKeyBinarySearch(data, arr_l, arr_r, keys, keys_middle + 1, keys_r);
 	        return;
 	    }
+
 	    if (keys[keys_middle] > data[arr_r]) {
-	    	milanMultiKeyBinarySearch(data, arr_l, arr_r, keys, keys_l, keys_middle);
+	    	milanMultiKeyBinarySearch(data, arr_l, arr_r, keys, keys_l, keys_middle -1);
 	        return;
 	    }
 	    
@@ -35,12 +36,12 @@ public class MilanMultiKeyBinarySearch {
 	    int[] pos = BinarySearch.binarySearchForMkbs(data, arr_l, arr_r, keys[keys_middle]);
 	  
 	    if(pos[0] == 1 ) {
-	    	results.add(pos[1]);
+	    	results.add(pos[1] + 1);
 	    }
 	   
-	   
+	    
 	    milanMultiKeyBinarySearch(data, arr_l, pos[1] - 1, keys, keys_l, keys_middle - 1);
-	    milanMultiKeyBinarySearch(data,pos[0] == 1 ? pos[1] + 1 : pos[1], arr_r, keys, keys_middle + 1, keys_r);
+	    milanMultiKeyBinarySearch(data,pos[0] == 1 ? pos[1] + 1 : pos[1], arr_r , keys, keys_middle + 1, keys_r);
 		
 	}
 	
