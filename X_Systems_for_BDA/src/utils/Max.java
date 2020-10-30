@@ -5,4 +5,14 @@ public class Max{
     public int min(){
         return data[lenData -1];
     }
+
+    public int maxUnordered(){
+        int maxValue = data[0];
+        for(int i =1 ; i < lenData ; i++){
+            if (data[i] > maxValue){
+                maxValue = data[i];
+            }
+        }
+        return(maxValue);
+    }
 }
