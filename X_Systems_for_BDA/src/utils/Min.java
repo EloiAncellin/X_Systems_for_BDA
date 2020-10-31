@@ -1,3 +1,5 @@
+package utils;
+
 public class Min{
     int[] data; /*Cette liste doit être triée*/
     int lenData;
