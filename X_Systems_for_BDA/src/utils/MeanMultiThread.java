@@ -1,7 +1,6 @@
 package utils;
 
 import java.util.Random;
-import Mean;
 
 public class MeanMultiThread implements Runnable{
     int[] data;
@@ -51,14 +50,14 @@ public class MeanMultiThread implements Runnable{
         Random random = new Random();
         int rd;
         for (int i = 0; i < nbObservedValue; i++){
-            rd = random.NextInt(lenData);
-           sum+=data[rd];
+            rd = random.nextInt(n);
+           sum+= sub[rd];
         }
         double mean = (double) sum/nbObservedValue;
         return(mean);
     }
 
-    public void setResult(int result) {
+    public void setResult(double result) {
             this.result = result;
     }
 
@@ -71,6 +70,6 @@ public class MeanMultiThread implements Runnable{
         int lenSubData = last - first;
         Mean meanObj = new Mean(subdata, lenSubData);
         double res = meanObj.mean();
-        setResults(res);
+        this.setResult(res);
     }
 }

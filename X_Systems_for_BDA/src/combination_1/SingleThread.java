@@ -40,6 +40,8 @@ public class SingleThread extends Combination {
 		prj.Project(selection,super.getColnames(),super.getDistinct());
 		System.out.println("Projection:"+System.nanoTime());
 		// ***** AGGREGATION ***** //
+		ArrayList<Integer> resultProj = prj.getResults();
+		
 		System.out.println("Aggregation :"+System.nanoTime());
 	}
 

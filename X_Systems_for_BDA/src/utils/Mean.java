@@ -26,7 +26,7 @@ public class Mean{
         int rd;
         int sum = 0;
         for (int i = 0; i<nbObservedValue; i++){
-            rd = random.NextInt(lenData);
+            rd = random.nextInt(lenData);
             sum+=data[rd];
         }
         double mean = (double) sum/nbObservedValue;
