@@ -1,75 +1,62 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MeanMultiThread implements Runnable{
-    int[] data;
+    ArrayList<Integer> data;
     int lenData;
-    int last;
     int part;
     int nbPart;
     double result;
 
-    public MeanMultiThread(int[] data, int lenData, int last, int part, int nbPart) {
+    public MeanMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart) {
         this.data = data;
         this.lenData = lenData;
-        this.last = last;
         this.part = part;
         this.nbPart = nbPart;
+        this.result = 0;
     }
 
-    public int[] subarray(int[] donnee, int min, int max){
+    public ArrayList<Integer> subarray(ArrayList<Integer> donnee, int min, int max){
         int n = max - min;
-        int[] sub = new int[n];
+        ArrayList<Integer> sub = new ArrayList<Integer>(n);
         for(int i = min; i<max; i++){
-            sub[i - min] = donnee[i];
+            sub.add(i, donnee.get(i));
         }
         return(sub);
     }
 
-    double mean(){
-        int sum = 0;
-        int first = part * (last/4);
-        last = (part+1) * (last/4)-1;
-        int n = last - first;
-        int[] sub = subarray(data, first , last);
-        for (int i = 0; i<n; i++){
-            sum+=sub[i];
-        }
-        double mean = (double)sum/n;
-        return(mean);
-    }
-
-    double meanStochastic(){
-        int sum = 0;
-        int nbObservedValue = lenData/10;
-        int first = part * (last/4);
-        last = (part+1) * (last/4)-1;
-        int n = last - first;
-        int[] sub = subarray(data, first , last);
-        Random random = new Random();
-        int rd;
-        for (int i = 0; i < nbObservedValue; i++){
-            rd = random.nextInt(n);
-           sum+= sub[rd];
-        }
-        double mean = (double) sum/nbObservedValue;
-        return(mean);
-    }
-
-    public void setResult(double result) {
-            this.result = result;
-    }
-
-
-    @Override
-    public void run() {
-        int first = part * (last/4);
-        last = (part+1) * (last/4)-1;
-        int[] subdata = subarray(data, first , last);
+    public double mean(int part){
+        int first = part * (lenData/nbPart);
+        int last = (part+1) * (lenData/nbPart)-1;
+        ArrayList<Integer> subdata = subarray(data, first , last);
         int lenSubData = last - first;
         Mean meanObj = new Mean(subdata, lenSubData);
         double res = meanObj.mean();
-        this.setResult(res);
+        return(res);
+    }
+
+    public double stochasticMean(int part){
+        int first = part * (lenData/nbPart);
+        int last = (part+1) * (lenData/nbPart)-1;
+        ArrayList<Integer> subdata = subarray(data, first , last);
+        int lenSubData = last - first;
+        Mean meanObj = new Mean(subdata, lenSubData);
+        double res = meanObj.stochasticMean();
+        return(res);
+    }
+
+    public void setResults(double res) {
+        this.result = res;
+    }
+
+    public double getResult() {
+        return(result);
+    }
+
+    public void run() {
+        this.setResults(mean(part));
     }
 }

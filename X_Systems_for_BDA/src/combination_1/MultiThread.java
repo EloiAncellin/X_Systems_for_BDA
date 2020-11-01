@@ -9,6 +9,7 @@ import utils.BasicHashSet;
 import utils.BinarySearchMultiThread;
 import utils.MultiThreadProjection;
 import utils.Projection;
+import utils.MeanMultiThread;
 
 public class MultiThread extends Combination {
 	private int part = 0;
@@ -17,7 +18,7 @@ public class MultiThread extends Combination {
 	private Projection prj;
 
 	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
-			int nbThreads) {
+					   int nbThreads) {
 		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
@@ -25,11 +26,11 @@ public class MultiThread extends Combination {
 	// PROJECTION :
 	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
-		
+
 		System.out.println("Debut :"+System.nanoTime());
 		getLoadData().read();
 		System.out.println("Read :"+System.nanoTime());
-		
+
 		// ***** SELECTION ***** //
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[super.getNbThreads()];
 		Thread myThreads[] = new Thread[super.getNbThreads()];
@@ -66,13 +67,33 @@ public class MultiThread extends Combination {
 
 		for (int j = 0; j < super.getNbThreads(); j++) {
 			myThreads[j].join();
-		
+
 		}
-		
+
 		getProjection();
+
 		System.out.println("Projection :"+System.nanoTime());
 
 		// ***** AGGREGATION ***** //
+		MeanMultiThread myMean[] = new MeanMultiThread[super.getNbThreads()];
+		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
+		int sizeArray = ageListString.size();
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		for(String s : ageListString) ageList.add(Integer.valueOf(s));
+		double average = 0;
+		for (int i = 0; i < super.getNbThreads(); i++) {
+
+			myMean[i] = new MeanMultiThread(ageList, sizeArray, part, super.getNbThreads());
+			myThreads[i] = new Thread(myMean[i]);
+			myThreads[i].start();
+			part++;
+		}
+		for (int j = 0; j < super.getNbThreads(); j++) {
+			myThreads[j].join();
+			average += myMean[j].getResult();
+		}
+		average/= super.getNbThreads();
+		System.out.println("average = " + average);
 		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
@@ -82,23 +103,22 @@ public class MultiThread extends Combination {
 
 	public void getProjection() {
 		if(super.getDistinct()) {
-		Hashtable<String, BasicHashSet> result;
-		result = prj.getMTProjectionDistinct();
-		for (String s : super.getColnames()) {
-			System.out.println(result.get(s).toList());
-			projection.put(s,result.get(s).toList());
+			Hashtable<String, BasicHashSet> result;
+			result = prj.getMTProjectionDistinct();
+			for (String s : super.getColnames()) {
+				//System.out.println(result.get(s).toList());
+				projection.put(s,result.get(s).toList());
+				System.out.println(projection);
 			}
 		}
 		else {
-			for (String s : super.getColnames()) {
-				projection.put(s,new ArrayList<>(super.getLoadData().GetColumns().get(s).values()));
-				System.out.println(projection.get(s));
-				}
-		  
+			projection = prj.getMTProjection();
+			System.out.println(projection);
+
 		}
-		
+
 
 	}
-	
+
 
 }
