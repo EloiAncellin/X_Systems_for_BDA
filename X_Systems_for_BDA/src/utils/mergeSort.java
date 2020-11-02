@@ -1,3 +1,5 @@
+package utils;
+
 public class mergeSort{
     int[] fusion (int[] L1, int tailleL1, int[] L2, int tailleL2){
 

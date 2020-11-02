@@ -606,7 +606,7 @@ public class Projection {
 			tab.add(i);
 		String[] All_col_names = RData.GetColumnsName();
 		Projection prj = new Projection(cl, All_col_names);
-		String[] col = { "CustomerAge", "ProductPrice" };
+		String[] col = { "CustomerAge", "CustomerName" };
         
 		Hashtable<String, ArrayList<?>> projection = prj.Project_sort(tab, col, true);
 		System.out.println(projection);

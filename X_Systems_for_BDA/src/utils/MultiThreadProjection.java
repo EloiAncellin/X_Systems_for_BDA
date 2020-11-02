@@ -31,8 +31,6 @@ public class MultiThreadProjection implements Runnable {
 			System.out.println(sub);
 			Projection.MultiThreadProject(new ArrayList<Integer>(sub),this.cl,this.distinct);
 			
-			
-			
 		}
 		
 		
