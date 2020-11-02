@@ -2,15 +2,15 @@ package utils;
 
 import java.util.ArrayList;
 
-public class MeanMultiThread implements Runnable{
+public class MinMultiThread implements Runnable{
 	ArrayList<Integer> data;
     int lenData;
     int part;
     int nbPart;
-    double result;
+    int result;
     boolean ordered;
 
-    public MeanMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart) {
+    public MinMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart) {
         this.data = data;
         this.lenData = lenData;
         this.part = part;
@@ -19,7 +19,7 @@ public class MeanMultiThread implements Runnable{
         this.ordered = true;
     }
     
-    public MeanMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart, boolean ordered) {
+    public MinMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart, boolean ordered) {
         this.data = data;
         this.lenData = lenData;
         this.part = part;
@@ -37,43 +37,55 @@ public class MeanMultiThread implements Runnable{
         return(sub);
     }
 
-    public double mean(int part){
+    public int minOrdered(int part){
         int first = part * (lenData/nbPart);
         int last = (part+1) * (lenData/nbPart)-1;
         ArrayList<Integer> subdata = subarray(data, first , last);
         int lenSubData = subdata.size();
-        Mean meanObj = new Mean(subdata, lenSubData);
-        double res = meanObj.mean();
+        Min minObj = new Min(subdata, lenSubData);
+        int res = minObj.minOrdered();
         //System.out.println();
         //System.out.println(subdata);
         return(res);
     }
     
-    public double stochasticMean(int part){
+    public int minUnordered(int part){
+        int first = part * (lenData/nbPart);
+        int last = (part+1) * (lenData/nbPart)-1;
+        ArrayList<Integer> subdata = subarray(data, first , last);
+        int lenSubData = subdata.size();
+        Min minObj = new Min(subdata, lenSubData);
+        int res = minObj.minUnordered();
+        //System.out.println();
+        //System.out.println(subdata);
+        return(res);
+    }
+    
+    public int stochasticMin(int part){
     	int first = part * (lenData/nbPart);
         int last = (part+1) * (lenData/nbPart)-1;
         ArrayList<Integer> subdata = subarray(data, first , last);
         int lenSubData = subdata.size();
-        Mean meanObj = new Mean(subdata, lenSubData);
-        double res = meanObj.stochasticMean();
+        Min minObj = new Min(subdata, lenSubData);
+        int res = minObj.stochasticMin();
         return(res);
     }
     
-    public void setResults(double res) {
+    public void setResults(int res) {
     	this.result = res;
     }
     
-    public double getResult() {
+    public int getResult() {
     	return(result);
     }
     
     public void run() {
     	if (ordered){
-    		this.setResults(mean(part));
+    		this.setResults(minOrdered(part));
     	}
     	else
     	{
-    		this.setResults(stochasticMean(part));
+    		this.setResults(stochasticMin(part));
     	}
     }
 }

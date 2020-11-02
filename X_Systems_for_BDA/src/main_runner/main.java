@@ -14,7 +14,7 @@ public class main {
 	//	SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);		
 	//	st.start_combination();
 	MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
-		mt.start_combination();
+	mt.start_combination();
 
 		
 	}

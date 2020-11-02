@@ -2,15 +2,15 @@ package utils;
 
 import java.util.ArrayList;
 
-public class MeanMultiThread implements Runnable{
+public class MaxMultiThread implements Runnable{
 	ArrayList<Integer> data;
     int lenData;
     int part;
     int nbPart;
-    double result;
+    int result;
     boolean ordered;
 
-    public MeanMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart) {
+    public MaxMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart) {
         this.data = data;
         this.lenData = lenData;
         this.part = part;
@@ -19,7 +19,7 @@ public class MeanMultiThread implements Runnable{
         this.ordered = true;
     }
     
-    public MeanMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart, boolean ordered) {
+    public MaxMultiThread(ArrayList<Integer> data, int lenData, int part, int nbPart, boolean ordered) {
         this.data = data;
         this.lenData = lenData;
         this.part = part;
@@ -27,6 +27,7 @@ public class MeanMultiThread implements Runnable{
         this.result = 0;
         this.ordered = ordered;
     }
+
 
     public ArrayList<Integer> subarray(ArrayList<Integer> donnee, int min, int max){
         int n = max - min + 1;
@@ -37,43 +38,55 @@ public class MeanMultiThread implements Runnable{
         return(sub);
     }
 
-    public double mean(int part){
+    public int maxOrdered(int part){
         int first = part * (lenData/nbPart);
         int last = (part+1) * (lenData/nbPart)-1;
         ArrayList<Integer> subdata = subarray(data, first , last);
         int lenSubData = subdata.size();
-        Mean meanObj = new Mean(subdata, lenSubData);
-        double res = meanObj.mean();
+        Max maxObj = new Max(subdata, lenSubData);
+        int res = maxObj.maxOrdered();
         //System.out.println();
         //System.out.println(subdata);
         return(res);
     }
     
-    public double stochasticMean(int part){
+    public int maxUnordered(int part){
+        int first = part * (lenData/nbPart);
+        int last = (part+1) * (lenData/nbPart)-1;
+        ArrayList<Integer> subdata = subarray(data, first , last);
+        int lenSubData = subdata.size();
+        Max maxObj = new Max(subdata, lenSubData);
+        int res = maxObj.maxUnordered();
+        //System.out.println();
+        //System.out.println(subdata);
+        return(res);
+    }
+    
+    public int stochasticMax(int part){
     	int first = part * (lenData/nbPart);
         int last = (part+1) * (lenData/nbPart)-1;
         ArrayList<Integer> subdata = subarray(data, first , last);
         int lenSubData = subdata.size();
-        Mean meanObj = new Mean(subdata, lenSubData);
-        double res = meanObj.stochasticMean();
+        Max maxObj = new Max(subdata, lenSubData);
+        int res = maxObj.stochasticMax();
         return(res);
     }
     
-    public void setResults(double res) {
+    public void setResults(int res) {
     	this.result = res;
     }
     
-    public double getResult() {
+    public int getResult() {
     	return(result);
     }
     
     public void run() {
     	if (ordered){
-    		this.setResults(mean(part));
+    		this.setResults(maxOrdered(part));
     	}
     	else
     	{
-    		this.setResults(stochasticMean(part));
+    		this.setResults(stochasticMax(part));
     	}
     }
 }

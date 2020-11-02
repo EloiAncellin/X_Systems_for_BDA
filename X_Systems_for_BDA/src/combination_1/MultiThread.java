@@ -10,6 +10,10 @@ import utils.BinarySearchMultiThread;
 import utils.MultiThreadProjection;
 import utils.Projection;
 import utils.MeanMultiThread;
+import utils.Min;
+import utils.Max;
+import utils.MinMultiThread;
+import utils.MaxMultiThread;
 
 public class MultiThread extends Combination {
 	private int part = 0;
@@ -94,9 +98,51 @@ public class MultiThread extends Combination {
 			average += myMean[j].getResult();
 		}
 		average/= super.getNbThreads();
-		System.out.println("average = " + average);
+		System.out.println("Average = " + average);
+		
+		part = 0;
+		MinMultiThread myMin[] = new MinMultiThread[super.getNbThreads()];
+		ArrayList<Integer> dataMin = new ArrayList<Integer>(super.getNbThreads());
+		for (int i = 0; i < super.getNbThreads(); i++) {
+
+			myMin[i] = new MinMultiThread(ageList, sizeArray, part, super.getNbThreads());
+			myThreads[i] = new Thread(myMin[i]);
+			myThreads[i].start();
+			part++;
+		}
+		for (int j = 0; j < super.getNbThreads(); j++) {
+			myThreads[j].join();
+			dataMin.add(j,myMin[j].getResult());
+		}
+		int min;
+		Min minObj = new Min(dataMin, super.getNbThreads());
+		min = minObj.minUnordered();
+		System.out.println("Min = " + min);
+		
+		
+		part = 0;
+		MaxMultiThread myMax[] = new MaxMultiThread[super.getNbThreads()];
+		ArrayList<Integer> dataMax = new ArrayList<Integer>(super.getNbThreads());
+		for (int i = 0; i < super.getNbThreads(); i++) {
+
+			myMax[i] = new MaxMultiThread(ageList, sizeArray, part, super.getNbThreads());
+			myThreads[i] = new Thread(myMax[i]);
+			myThreads[i].start();
+			part++;
+		}
+		for (int j = 0; j < super.getNbThreads(); j++) {
+			myThreads[j].join();
+			dataMax.add(j,myMax[j].getResult());
+		}
+		int max;
+		Max maxObj = new Max(dataMax, super.getNbThreads());
+		max = maxObj.maxUnordered();
+		System.out.println("Max = " + max);
 		System.out.println("Aggregation :"+System.nanoTime());
 	}
+	
+	
+	
 
 	public void addSelection(int result) {
 		this.selection.add(result + 1);
