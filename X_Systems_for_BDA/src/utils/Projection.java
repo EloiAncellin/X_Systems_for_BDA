@@ -26,18 +26,20 @@ public class Projection {
 
 	public static Hashtable<String, Hashtable<Integer, ?>> Array_to_Hash(Hashtable<String, Hashtable<Integer, ?>> cl,
 			ArrayList<Integer> tab, String allcolnames) {
-
+		Hashtable<String, Hashtable<Integer, ?>> hashmap = cl;
 		Hashtable<String, Hashtable<Integer, ?>> colonne = new Hashtable<String, Hashtable<Integer, ?>>();
 		Hashtable<Integer, Object> temp = new Hashtable();
-		// this.Columns = cl;
-		for (Object i : tab) {
+	
+		for (Integer i : tab) {
 
-			for (Map.Entry<Integer, ?> entry : cl.get(allcolnames).entrySet()) {
-				if (entry.getKey() == i) {
-
+			for (Map.Entry<Integer, ?> entry : hashmap.get(allcolnames).entrySet()) {
+		
+				if (entry.getKey().compareTo(i) == 0) {
+					//System.out.println("getkey : " +entry.getKey());
 					temp.put(entry.getKey(), entry.getValue());
+				//	System.out.println("temp : " +temp);
 					colonne.put(allcolnames, temp);
-
+	
 				}
 
 			}
@@ -149,22 +151,14 @@ public class Projection {
 				System.out.println();
 
 				for (int i : tab_wo_dup) {
-					// System.out.println(i);
-					//System.out.println(tab1.get(column).get(i));
-					result.add(tab1.get(column).get(i));
 
-				}
-				
-				
+					result.add(tab1.get(column).get(i));
+				}	
 				if (!resultMT.containsKey(column)) {
 					resultMT.put(column, new ArrayList<>());
 				}
 				resultMT.get(column).addAll(result);
-				// System.out.println("id " + id_wo_duplicate);
-             
 			}
-			
-
 		} else {
 			for (String i : col) {
 				System.out.print(i + " | ");
@@ -181,32 +175,28 @@ public class Projection {
 				}
 				resultMT.get(j).addAll(tab);
 			}
-
-		
 		}
-		
 		return resultMT;
 	}
 
+	
 	public synchronized Hashtable<String, ArrayList<?>> Project_sort(ArrayList<Integer> index, String[] col, Boolean distinct) {
 		Hashtable<String, Hashtable<Integer, ?>> hashmap = this.columns;
 
 		if (distinct == true) {
 			for (String column : col) {
 				Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap, index, column);
+		
 				ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1, column);
 				ArrayList result = new ArrayList();
 				System.out.println();
 
 				for (int i : tab_wo_dup) {
-					// System.out.println(i);
-				//	System.out.println(tab1.get(column).get(i) + " | ");
+			
 					result.add(tab1.get(column).get(i));
 
 				}
 				resultST.put(column, result);
-				// System.out.println(id_wo_duplicate);
-
 			}
 
 		} else {
@@ -221,9 +211,7 @@ public class Projection {
 					System.out.print(((Hashtable) columns.get(j)).get(i) + " | ");
 				}
 				System.out.println();
-
 			}
-
 		}
 		
 		return resultST;
@@ -313,6 +301,7 @@ public class Projection {
 			String attribut) {
 
 		ArrayList<Integer> tab_id_wo_duplicate = new ArrayList<Integer>();
+	//	System.out.println("bon" + tab.get(attribut));
 		ArrayList<Object> tab_values = new ArrayList(tab.get(attribut).values());
 		if (tab_values.get(0) instanceof String) {
 			Object[] arr = tab_values.toArray(new String[tab_values.size()]);
