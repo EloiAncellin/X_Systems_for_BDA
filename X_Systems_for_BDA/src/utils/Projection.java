@@ -11,60 +11,41 @@ public class Projection {
 	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
 	private static volatile Hashtable<String, ArrayList<?>> resultMT = new Hashtable<String, ArrayList<?>>();
 	private Hashtable<String, ArrayList<?>> resultST = new Hashtable<>();
-	//private static volatile Hashtable<String, ArrayList<?>> id_wo_duplicate = new Hashtable<String, ArrayList<?>>();
 	
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
-
 		columns = cl;
-
 		for (String s : allcolnames) {
 			hashSetColumns.put(s, new BasicHashSet(cl.get(s).size()));
-
 		}
-
 	}
 
 	public static Hashtable<String, Hashtable<Integer, ?>> Array_to_Hash(Hashtable<String, Hashtable<Integer, ?>> cl,
-			ArrayList<Integer> tab, String allcolnames) {
+		ArrayList<Integer> tab, String allcolnames) {
 		Hashtable<String, Hashtable<Integer, ?>> hashmap = cl;
 		Hashtable<String, Hashtable<Integer, ?>> colonne = new Hashtable<String, Hashtable<Integer, ?>>();
 		Hashtable<Integer, Object> temp = new Hashtable();
 	
 		for (Integer i : tab) {
-
 			for (Map.Entry<Integer, ?> entry : hashmap.get(allcolnames).entrySet()) {
-		
 				if (entry.getKey().compareTo(i) == 0) {
-					//System.out.println("getkey : " +entry.getKey());
 					temp.put(entry.getKey(), entry.getValue());
-				//	System.out.println("temp : " +temp);
 					colonne.put(allcolnames, temp);
-	
 				}
-
 			}
-
 		}
 		return colonne;
 	}
 
 	public synchronized static Hashtable<String, ArrayList<?>> MultiThreadProject(ArrayList<Integer> index,
 			String[] colnames, Boolean distinct) {
-
 		if (distinct == true) {
-
 			for (String j : colnames) {
-
 				for (int i : index) {
-
 					hashSetColumns.get(j).add(((Hashtable<Integer, ?>) columns.get(j)).get(i));
 				}
 			}
-
 		}
-
 		else {
-
 			for (String j : colnames) {
 				ArrayList tab = new ArrayList<>();
 				for (int i : index) {
@@ -77,11 +58,9 @@ public class Projection {
 			}
 		}
 		return resultMT;
-
 	}
 
 	public Hashtable<String, BasicHashSet> getMTProjectionDistinct() {
-
 		return hashSetColumns;
 	}
 
