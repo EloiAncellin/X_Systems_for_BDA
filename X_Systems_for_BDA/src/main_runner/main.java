@@ -1,7 +1,7 @@
 package main_runner;
 
 
-import combination_1.SingleThread;
+import combination_3.SingleThread;
 import combination_1.MultiThread;
 public class main {
 

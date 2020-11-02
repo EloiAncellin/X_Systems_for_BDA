@@ -11,7 +11,7 @@ public class Projection {
 	private static volatile Hashtable<String, BasicHashSet> hashSetColumns = new Hashtable<String, BasicHashSet>();
 	private static volatile Hashtable<String, ArrayList<?>> resultMT = new Hashtable<String, ArrayList<?>>();
 	private Hashtable<String, ArrayList<?>> resultST = new Hashtable<>();
-	private static volatile Hashtable<String, ArrayList<Integer>> id_wo_duplicate = new Hashtable<String, ArrayList<Integer>>();
+	//private static volatile Hashtable<String, ArrayList<?>> id_wo_duplicate = new Hashtable<String, ArrayList<?>>();
 	
 	public Projection(Hashtable<String, Hashtable<Integer, ?>> cl, String[] allcolnames) {
 
@@ -136,7 +136,7 @@ public class Projection {
 
 	}
 
-	public synchronized static void MultiThreadProjectsort(ArrayList<Integer> index, String[] col, Boolean distinct) {
+	public synchronized static Hashtable<String, ArrayList<?>> MultiThreadProjectsort(ArrayList<Integer> index, String[] col, Boolean distinct) {
 
 		Hashtable<String, Hashtable<Integer, ?>> hashmap = columns;
 
@@ -144,17 +144,19 @@ public class Projection {
 			for (String column : col) {
 				Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap, index, column);
 				ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1, column);
+				ArrayList result = new ArrayList();
 
 				System.out.println();
 
 				for (int i : tab_wo_dup) {
 					// System.out.println(i);
-					System.out.println(tab1.get(column).get(i) + " | ");
+					//System.out.println(tab1.get(column).get(i));
+					result.add(tab1.get(column).get(i));
 
 				}
-				id_wo_duplicate.put(column, tab_wo_dup);
+				resultMT.put(column, result);
 				// System.out.println("id " + id_wo_duplicate);
-
+             
 			}
 
 		} else {
@@ -163,35 +165,40 @@ public class Projection {
 			}
 
 			System.out.println();
-			int record;
-			for (int i : index) {
-				for (String j : col) {
-					System.out.print(((Hashtable) columns.get(j)).get(i) + " | ");
+			for (String j : col) {
+				ArrayList tab = new ArrayList<>();
+				for (int i : index) {
+					tab.add(columns.get(j).get(i));
+					if (!resultMT.containsKey(j)) {
+						resultMT.put(j, new ArrayList<>());
+					}
 				}
-				System.out.println();
-
+				resultMT.get(j).addAll(tab);
 			}
 
+		
 		}
-
+		
+		return resultMT;
 	}
 
-	public synchronized void Project_sort(ArrayList<Integer> index, String[] col, Boolean distinct) {
+	public synchronized Hashtable<String, ArrayList<?>> Project_sort(ArrayList<Integer> index, String[] col, Boolean distinct) {
 		Hashtable<String, Hashtable<Integer, ?>> hashmap = this.columns;
 
 		if (distinct == true) {
 			for (String column : col) {
 				Hashtable<String, Hashtable<Integer, ?>> tab1 = Array_to_Hash(hashmap, index, column);
 				ArrayList<Integer> tab_wo_dup = removeDuplicateHashmap(tab1, column);
-
+				ArrayList result = new ArrayList();
 				System.out.println();
 
 				for (int i : tab_wo_dup) {
 					// System.out.println(i);
-					System.out.println(tab1.get(column).get(i) + " | ");
+				//	System.out.println(tab1.get(column).get(i) + " | ");
+					result.add(tab1.get(column).get(i));
 
 				}
-				id_wo_duplicate.put(column, tab_wo_dup);
+				resultST.put(column, result);
 				// System.out.println(id_wo_duplicate);
 
 			}
@@ -212,6 +219,8 @@ public class Projection {
 			}
 
 		}
+		
+		return resultST;
 	}
 
 	public static int removeDuplicateElements(String arr[], int n) {
@@ -266,9 +275,7 @@ public class Projection {
 
 	}
 
-	public Hashtable<String, ArrayList<Integer>> getid_wo_duplicate() {
-		return this.id_wo_duplicate;
-	}
+	
 
 	public static int removeDuplicateElements_double(double arr[], int n) {
 
@@ -600,8 +607,8 @@ public class Projection {
 		String[] All_col_names = RData.GetColumnsName();
 		Projection prj = new Projection(cl, All_col_names);
 		String[] col = { "CustomerAge", "ProductPrice" };
-
-		prj.Project_sort(tab, col, true);
-		System.out.println();
+        
+		Hashtable<String, ArrayList<?>> projection = prj.Project_sort(tab, col, true);
+		System.out.println(projection);
 	}
 }
