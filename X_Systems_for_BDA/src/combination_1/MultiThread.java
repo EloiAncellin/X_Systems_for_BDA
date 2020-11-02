@@ -75,10 +75,11 @@ public class MultiThread extends Combination {
 		System.out.println("Projection :"+System.nanoTime());
 
 		// ***** AGGREGATION ***** //
+		part = 0;
 		MeanMultiThread myMean[] = new MeanMultiThread[super.getNbThreads()]; 
 		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier ï¿½ probleme de type*/
 		for(String s : ageListString) ageList.add(Integer.valueOf(s));
 		double average = 0;
 		for (int i = 0; i < super.getNbThreads(); i++) {

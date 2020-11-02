@@ -45,10 +45,12 @@ public class SingleThread extends Combination{
 
 		System.out.println("Projection :"+System.nanoTime());
 		// ***** AGGREGATION ***** //
-		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
+		
+		if (projection.get("CustomerAge").get(0) instanceof Integer) {
+		ArrayList<Integer> ageListString = (ArrayList<Integer>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier � probleme de type*/
-		for(String s : ageListString) ageList.add(Integer.valueOf(s));
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		for(Integer s : ageListString) ageList.add(s);
 		System.out.println(ageList);
 		System.out.println(ageList.get(0));
 		Mean meanObject = new Mean(ageList, sizeArray);
@@ -60,8 +62,11 @@ public class SingleThread extends Combination{
 		System.out.println("Moyenne = :" + mean);
 		System.out.println("Min = :" + min);
 		System.out.println("Max = :" + max);
+		}
 		
 		System.out.println("Aggregation :"+System.nanoTime());
+		
+	//	System.out.println("Aggregation :"+System.nanoTime());
 	}
 
 	public void addSelection(int result) {

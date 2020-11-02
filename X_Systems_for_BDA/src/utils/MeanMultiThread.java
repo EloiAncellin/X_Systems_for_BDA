@@ -33,6 +33,9 @@ public class MeanMultiThread implements Runnable{
         int lenSubData = last - first;
         Mean meanObj = new Mean(subdata, lenSubData);
         double res = meanObj.mean();
+        System.out.println(" part =   " + part );
+        System.out.println(" lenDAta =   " + lenSubData);
+        System.out.println(" nb prt = " +nbPart);
         return(res);
     }
     
@@ -55,6 +58,7 @@ public class MeanMultiThread implements Runnable{
     }
     
     public void run() {
+    	System.out.println(lenData);
 		this.setResults(mean(part));
     }
 }
