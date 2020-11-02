@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import combination.Combination;
+import utils.Max;
+import utils.Mean;
 import utils.MilanMultiKeyBinarySearch;
+import utils.Min;
 import utils.Projection;
 
 public class SingleThread extends Combination {
@@ -41,6 +44,23 @@ public class SingleThread extends Combination {
 		System.out.println(projection);
 		System.out.println("Projection :"+System.nanoTime());
 		// ***** AGGREGATION ***** //
+		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
+		int sizeArray = ageListString.size();
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		for(String s : ageListString) ageList.add(Integer.valueOf(s));
+		System.out.println(ageList);
+		System.out.println(ageList.get(0));
+		Mean meanObject = new Mean(ageList, sizeArray);
+		double mean = meanObject.mean();
+		Min minObject = new Min(ageList, sizeArray);
+		int min = minObject.minOrdered();
+		Max maxObject = new Max(ageList, sizeArray);
+		int max = maxObject.maxOrdered();
+		System.out.println("Moyenne = :" + mean);
+		System.out.println("Min = :" + min);
+		System.out.println("Max = :" + max);
+
+		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
 	public void setSelection(ArrayList<Integer> results) {

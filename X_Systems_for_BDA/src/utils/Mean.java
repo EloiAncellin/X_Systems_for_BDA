@@ -1,10 +1,13 @@
+package utils;
+
 import java.util.Random;
 
+import java.util.ArrayList;
 public class Mean{
-    int[] data;
+    ArrayList<Integer> data;
     int lenData;
 
-    public Mean(int[] data, int lenData) {
+    public Mean(ArrayList<Integer> data, int lenData) {
         this.data = data;
         this.lenData = lenData;
     }
@@ -12,7 +15,7 @@ public class Mean{
     public double mean(){
         int sum = 0;
         for (int i = 0; i<lenData; i++){
-            sum+=data[i];
+            sum+=data.get(i);
         }
         double mean = (double) sum / lenData;
         return(mean);
@@ -23,9 +26,15 @@ public class Mean{
         Random random = new Random();
         int rd;
         int sum = 0;
-        for (int i = 0; i<nbObservedValue; i++){
-            rd = random.NextInt(lenData);
-            sum+=data[rd];
+        if (nbObservedValue != 0) {
+	        for (int i = 0; i<nbObservedValue; i++){
+	            rd = random.nextInt(lenData);
+	            sum+=data.get(rd);
+	        }
+        }
+        else {
+        	rd = random.nextInt(lenData);
+            sum+=data.get(rd);
         }
         double mean = (double) sum/nbObservedValue;
         return(mean);
