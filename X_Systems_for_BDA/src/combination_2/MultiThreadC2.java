@@ -1,4 +1,4 @@
-package combination_3;
+package combination_2;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -12,29 +12,30 @@ import utils.MilanMultiKeyBinarySearchMultiThread;
 import utils.Min;
 import utils.MinMultiThread;
 import utils.MultiThreadProjection;
-import utils.MultiThreadProjectionSort;
 import utils.Projection;
 
-public class MultiThread extends Combination {
+public class MultiThreadC2 extends Combination {
 
 	private int part = 0;
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
+	Hashtable<String, ArrayList<?>> projection = new Hashtable<>();
 	private Projection prj;
-	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
-	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
+
+	public MultiThreadC2(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
 			int nbThreads) {
-		super(filename, lenFile, distinct, keys,colnames,nbThreads);
+		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
 	// SELECTION : Milan Multi Key Binary Search
-	
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination() throws InterruptedException {
 
-		System.out.println("Debut :"+System.nanoTime());
+		System.out.println("Debut :" + System.nanoTime());
 		getLoadData().read();
-		System.out.println("Read :"+System.nanoTime());
-		
+		System.out.println("Read :" + System.nanoTime());
+
 		// ***** SELECTION *****//
 		Thread myThreads[] = new Thread[4];
 		MilanMultiKeyBinarySearchMultiThread mmkbsmt[] = new MilanMultiKeyBinarySearchMultiThread[4];
@@ -52,42 +53,41 @@ public class MultiThread extends Combination {
 				addSelection(mmkbsmt[i].getResults());
 			}
 		}
-       System.out.println(selection.size());
-       System.out.println("Selection :"+System.nanoTime());
-
+		entireSelection();
+		System.out.println("Selection :" + System.nanoTime());
 		// ***** PROJECTION ***** //
-		
-	 //	System.out.println("th " + super.getNbThreads());
 		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
-		MultiThreadProjectionSort myPMT[] = new MultiThreadProjectionSort[super.getNbThreads()];
+		MultiThreadProjection myPMT[] = new MultiThreadProjection[super.getNbThreads()];
 		part = 0;
 		for (int i = 0; i < super.getNbThreads(); i++) {
 
-			myPMT[i] = new MultiThreadProjectionSort(selection, super.getColnames(), super.getDistinct(),
+			myPMT[i] = new MultiThreadProjection(selection, super.getColnames(), super.getDistinct(),
 					super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName(), part, selection.size());
 			myThreads[i] = new Thread(myPMT[i]);
 			myThreads[i].start();
-			myThreads[i].join();
 			part++;
-			
-			
 		}
-     
-        projection = myPMT[super.getNbThreads()-1].getprojection();
-		System.out.println("project = " + projection);
 
-		System.out.println("Projection  :"+System.nanoTime());
+		for (int j = 0; j < super.getNbThreads(); j++) {
+			myThreads[j].join();
 
+		}
+
+		getProjection();
+		System.out.println("Projection  :" + System.nanoTime());
 
 		// ***** AGGREGATION ***** //
 		part = 0;
-		MeanMultiThread myMean[] = new MeanMultiThread[super.getNbThreads()]; 
-		ArrayList<Integer> ageList = (ArrayList<Integer>)projection.get("CustomerAge");
-		int sizeArray = ageList.size();
+		MeanMultiThread myMean[] = new MeanMultiThread[super.getNbThreads()];
+		ArrayList<String> ageListString = (ArrayList<String>) projection.get("CustomerAge");
+		int sizeArray = ageListString.size();
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /* Pour palier � probleme de type */
+		for (String s : ageListString)
+			ageList.add(Integer.valueOf(s));
 		double average = 0;
 		for (int i = 0; i < super.getNbThreads(); i++) {
 
-			myMean[i] = new MeanMultiThread(ageList, sizeArray, part, super.getNbThreads(), false);
+			myMean[i] = new MeanMultiThread(ageList, sizeArray, part, super.getNbThreads());
 			myThreads[i] = new Thread(myMean[i]);
 			myThreads[i].start();
 			part++;
@@ -96,52 +96,77 @@ public class MultiThread extends Combination {
 			myThreads[j].join();
 			average += myMean[j].getResult();
 		}
-		average/= super.getNbThreads();
+		average /= super.getNbThreads();
 		System.out.println("Average = " + average);
-		
+
 		part = 0;
 		MinMultiThread myMin[] = new MinMultiThread[super.getNbThreads()];
 		ArrayList<Integer> dataMin = new ArrayList<Integer>(super.getNbThreads());
 		for (int i = 0; i < super.getNbThreads(); i++) {
 
-			myMin[i] = new MinMultiThread(ageList, sizeArray, part, super.getNbThreads(), false);
+			myMin[i] = new MinMultiThread(ageList, sizeArray, part, super.getNbThreads());
 			myThreads[i] = new Thread(myMin[i]);
 			myThreads[i].start();
 			part++;
 		}
 		for (int j = 0; j < super.getNbThreads(); j++) {
 			myThreads[j].join();
-			dataMin.add(j,myMin[j].getResult());
+			dataMin.add(j, myMin[j].getResult());
 		}
 		int min;
 		Min minObj = new Min(dataMin, super.getNbThreads());
 		min = minObj.minUnordered();
 		System.out.println("Min = " + min);
-		
-		
+
 		part = 0;
 		MaxMultiThread myMax[] = new MaxMultiThread[super.getNbThreads()];
 		ArrayList<Integer> dataMax = new ArrayList<Integer>(super.getNbThreads());
 		for (int i = 0; i < super.getNbThreads(); i++) {
 
-			myMax[i] = new MaxMultiThread(ageList, sizeArray, part, super.getNbThreads(), false);
+			myMax[i] = new MaxMultiThread(ageList, sizeArray, part, super.getNbThreads());
 			myThreads[i] = new Thread(myMax[i]);
 			myThreads[i].start();
 			part++;
 		}
 		for (int j = 0; j < super.getNbThreads(); j++) {
 			myThreads[j].join();
-			dataMax.add(j,myMax[j].getResult());
+			dataMax.add(j, myMax[j].getResult());
 		}
 		int max;
 		Max maxObj = new Max(dataMax, super.getNbThreads());
 		max = maxObj.maxUnordered();
 		System.out.println("Max = " + max);
-		System.out.println("Aggregation :"+System.nanoTime());
+		System.out.println("Aggregation :" + System.nanoTime());
+		System.out.println("Aggregation :" + System.nanoTime());
 	}
 
 	public void addSelection(ArrayList<Integer> selection) {
 		this.selection.addAll(selection);
 	}
-	
+
+	public void entireSelection() {
+		int lowerBound = this.selection.get(0);
+		int higherBound = this.selection.get(1);
+		this.selection.clear();
+		for (int i = lowerBound; i <= higherBound; i++) {
+			this.selection.add(i);
+		}
+	}
+
+	public void getProjection() {
+		if (super.getDistinct()) {
+			Hashtable<String, BasicHashSet> result;
+			result = prj.getMTProjectionDistinct();
+			for (String s : super.getColnames()) {
+				System.out.println(result.get(s).toList());
+				projection.put(s, result.get(s).toList());
+			}
+		} else {
+			projection = prj.getMTProjection();
+			System.out.println(projection);
+
+		}
+
+	}
+
 }

@@ -1,42 +1,42 @@
-package combination_1;
+package combination_2;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import combination.Combination;
-import utils.BinarySearch;
-import utils.Projection;
-import utils.Mean;
-import utils.Min;
 import utils.Max;
+import utils.Mean;
+import utils.MilanMultiKeyBinarySearch;
+import utils.Min;
+import utils.Projection;
 
+public class SingleThreadC2 extends Combination {
 
-public class SingleThread extends Combination {
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
-	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads) {
-		super(filename, lenFile, distinct, keys,colnames,nbThreads);
+	public SingleThreadC2(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
+			int nbThreads) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
-	// SELECTION : Multi Key Binary Search
-	// PROJECTION : Hashing based projection
-	// AGGREGATION : Simple Mean
+	// SELECTION : Milan Multi Key Binary Search
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination() {
-		
 		System.out.println("Debut :"+System.nanoTime());
 		getLoadData().read();
 		System.out.println("Read :"+System.nanoTime());
 		// ***** SELECTION ***** //
-		for (int i = 0; i < getKeys().length; i++) {
-			addSelection(BinarySearch.binarySearch(getLoadData().getCustomerPrice(), 0,
-					getLoadData().getCustomerPrice().length - 1, getKeys()[i]));
-		}
+		
+		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
+		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0,
+				getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
+		setSelection(mmkbs.getResults());
+		
+		entireSelection();
 		System.out.println("Selection :"+System.nanoTime());
-
 		// ***** PROJECTION ***** //
-		
-		
 		Hashtable<String, Hashtable<Integer, ?>> cl = super.getLoadData().GetColumns();
 		String[] All_col_names = super.getLoadData().GetColumnsName();
 		
@@ -44,8 +44,9 @@ public class SingleThread extends Combination {
 		
 		projection = prj.Project(selection,super.getColnames(),super.getDistinct());
 		System.out.println(projection);
-		System.out.println("Projection:"+System.nanoTime());
+		System.out.println("Projection :"+System.nanoTime());
 		// ***** AGGREGATION ***** //
+		
 		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
 		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
@@ -61,15 +62,23 @@ public class SingleThread extends Combination {
 		System.out.println("Moyenne = :" + mean);
 		System.out.println("Min = :" + min);
 		System.out.println("Max = :" + max);
-		
+
 		System.out.println("Aggregation :"+System.nanoTime());
 	}
 
-	public void addSelection(int result) {
-		if (result != -1) {
-			this.selection.add(result + 1);
+	public void setSelection(ArrayList<Integer> results) {
+		this.selection = results;
+	}
+	
+	public void entireSelection() {
+		int lowerBound = this.selection.get(0);
+		int higherBound = this.selection.get(1);
+
+		this.selection.clear();
+		for (int i = lowerBound; i <= higherBound; i++) {
+			this.selection.add(i);
 		}
+
 	}
 
-	
 }

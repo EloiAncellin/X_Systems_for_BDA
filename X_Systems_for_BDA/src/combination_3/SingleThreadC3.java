@@ -1,4 +1,4 @@
-package combination_2;
+package combination_3;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -10,12 +10,14 @@ import utils.MilanMultiKeyBinarySearch;
 import utils.Min;
 import utils.Projection;
 
-public class SingleThread extends Combination {
 
+public class SingleThreadC3 extends Combination{
+	
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
+
 	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
-	public SingleThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
+	public SingleThreadC3(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
 			int nbThreads) {
 		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
@@ -29,42 +31,64 @@ public class SingleThread extends Combination {
 		System.out.println("Read :"+System.nanoTime());
 		// ***** SELECTION ***** //
 		MilanMultiKeyBinarySearch mmkbs = new MilanMultiKeyBinarySearch();
-		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0,
-				getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
+		mmkbs.milanMultiKeyBinarySearch(getLoadData().getCustomerPrice(), 0, getLoadData().getCustomerPrice().length - 1, getKeys(), 0, getKeys().length - 1);
 		setSelection(mmkbs.getResults());
-		System.out.println("Selection :"+System.nanoTime());
+
+		entireSelection();
+		System.out.println("Selectio, :"+System.nanoTime());
 		// ***** PROJECTION ***** //
 		Hashtable<String, Hashtable<Integer, ?>> cl = super.getLoadData().GetColumns();
 		String[] All_col_names = super.getLoadData().GetColumnsName();
 		
 		Projection prj = new Projection(cl, All_col_names);
-		
-		projection = prj.Project(selection,super.getColnames(),super.getDistinct());
-		
+
+		projection = prj.Project_sort(selection,super.getColnames(),super.getDistinct());
 		System.out.println(projection);
+
 		System.out.println("Projection :"+System.nanoTime());
 		// ***** AGGREGATION ***** //
-		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
+		
+		if (projection.get("CustomerAge").get(0) instanceof Integer) {
+		ArrayList<Integer> ageListString = (ArrayList<Integer>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
-		for(String s : ageListString) ageList.add(Integer.valueOf(s));
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier Ã  probleme de type*/
+		for(Integer s : ageListString) ageList.add(s);
 		System.out.println(ageList);
 		System.out.println(ageList.get(0));
 		Mean meanObject = new Mean(ageList, sizeArray);
-		double mean = meanObject.mean();
+		double mean = meanObject.stochasticMean();
 		Min minObject = new Min(ageList, sizeArray);
-		int min = minObject.minOrdered();
+		int min = minObject.stochasticMin();
 		Max maxObject = new Max(ageList, sizeArray);
-		int max = maxObject.maxOrdered();
+		int max = maxObject.stochasticMax();
 		System.out.println("Moyenne = :" + mean);
 		System.out.println("Min = :" + min);
 		System.out.println("Max = :" + max);
-
+		}
+		
 		System.out.println("Aggregation :"+System.nanoTime());
+		
+	//	System.out.println("Aggregation :"+System.nanoTime());
+	}
+
+	public void addSelection(int result) {
+		this.selection.add(result);
 	}
 
 	public void setSelection(ArrayList<Integer> results) {
 		this.selection = results;
 	}
+	
+	public void entireSelection() {
+		int lowerBound = this.selection.get(0);
+		int higherBound = this.selection.get(1);
 
+		this.selection.clear();
+		for (int i = lowerBound; i <= higherBound; i++) {
+			this.selection.add(i);
+		}
+
+	}
+
+	
 }
