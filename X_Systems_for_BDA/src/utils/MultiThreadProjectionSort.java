@@ -25,17 +25,15 @@ public class MultiThreadProjectionSort implements Runnable{
 		int first = part * (last/4);
 		last = (part+1) * (last/4)-1;
 		List<Integer> sub = this.id.subList(first ,last+1);
-	 //   System.out.println("sub : " +sub);
 		this.projection = Projection.MultiThreadProjectsort(new ArrayList<Integer>(sub),this.cl,this.distinct);
 		this.projection = Projection.removemergeMulti(projection,this.cl);
-		
-	  //  System.out.println(projection);
 	}
     
 	public synchronized Hashtable<String, ArrayList<?>> getprojection() {
 		return this.projection;
 	}
 	public static void main(String[] args) {
+		/*
 		LoadData Rdata = new LoadData("src/dataset_sorted/dataset_sorted_100.csv",100);
 		Rdata.read();
 		
@@ -56,9 +54,8 @@ public class MultiThreadProjectionSort implements Runnable{
 		System.out.println("thread1");
 		
 	    Thread T2 = new Thread(new MultiThreadProjectionSort(tab3,col,false,cl,All_col_names,1,60));
-	//    T2.join();
 	    T2.start();
-	    System.out.println("thread2");
+	    System.out.println("thread2");*/
 	
 	   
 	}
