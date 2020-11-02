@@ -62,18 +62,15 @@ public class MultiThread extends Combination {
 					super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName(), part, selection.size());
 			myThreads[i] = new Thread(myPMT[i]);
 			myThreads[i].start();
+			myThreads[i].join();
 			part++;
 			
+			
 		}
-        
-		for (int j = 0; j < super.getNbThreads(); j++) {
-			myThreads[j].join();
-		
-		}
-		projection = myPMT[getNbThreads()-1].getprojection();
-		System.out.println(projection);
-		
-	//	getProjection();
+     
+        projection = myPMT[super.getNbThreads()-1].getprojection();
+		System.out.println("project = " + projection);
+
 		System.out.println("Projection  :"+System.nanoTime());
 
 

@@ -27,10 +27,10 @@ public class MultiThreadProjectionSort implements Runnable{
 		this.projection = Projection.MultiThreadProjectsort(new ArrayList<Integer>(sub),this.cl,this.distinct);
 		this.projection = Projection.removemergeMulti(projection,this.cl);
 		
-	    System.out.println(projection);
+	   // System.out.println(projection);
 	}
     
-	public Hashtable<String, ArrayList<?>> getprojection() {
+	public synchronized Hashtable<String, ArrayList<?>> getprojection() {
 		return this.projection;
 	}
 	public static void main(String[] args) {/*
@@ -45,7 +45,7 @@ public class MultiThreadProjectionSort implements Runnable{
 		tab.add(i);}
 		
 		String [] All_col_names = Rdata.GetColumnsName();
-		String[] col = {"CustomerName"};
+		String[] col = {"CustomerAge"};
 		ArrayList <Integer> tab2 = new ArrayList<Integer> (tab.subList(0, 50));
 		ArrayList <Integer> tab3 = new ArrayList<Integer> (tab.subList(0, 99));
 	   
@@ -55,8 +55,8 @@ public class MultiThreadProjectionSort implements Runnable{
 	    Thread T2 = new Thread(new MultiThreadProjectionSort(tab3,col,true,cl,All_col_names,1,60));
 	    T2.start();
 	    System.out.println("thread2");
-	//    System.out.println(getprojection());
-	   */
+	 //   System.out.println(getprojection());*/
+	   
 	}
 }
 
