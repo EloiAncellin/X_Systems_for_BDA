@@ -154,10 +154,16 @@ public class Projection {
 					result.add(tab1.get(column).get(i));
 
 				}
-				resultMT.put(column, result);
+				
+				
+				if (!resultMT.containsKey(column)) {
+					resultMT.put(column, new ArrayList<>());
+				}
+				resultMT.get(column).addAll(result);
 				// System.out.println("id " + id_wo_duplicate);
              
 			}
+			
 
 		} else {
 			for (String i : col) {
@@ -591,7 +597,53 @@ public class Projection {
 		}
 
 	}
+    
+	public static Hashtable<String, ArrayList<?>> removemergeMulti(Hashtable<String, ArrayList<?>> result, String[] colnames){
+		
+		Hashtable<String, ArrayList<?>> results = new Hashtable<String, ArrayList<?>> ();
+		for (String s : colnames ) {
+			if(result.get(s).get(0) instanceof String) {
+				
+				Object[] arr = result.get(s).toArray(new String[result.get(s).size()]);
+				String[] str = (String[]) arr;
+				int longueur = str.length;
 
+				mergeSort(str, 0, str.length - 1);
+
+				int longueure = removeDuplicateElements(str, longueur);
+				ArrayList<String> tab_wo_duplicate = new ArrayList<String>(longueure);
+				for (int i = 0; i < longueure; i++) {
+					tab_wo_duplicate.add(str[i]);
+ 
+				}
+				results.put(s,tab_wo_duplicate);
+				
+			}
+			if(result.get(s).get(0) instanceof Integer) {
+				Integer[] arr = result.get(s).toArray(new Integer[result.get(s).size()]);
+				int[] str = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+				int longueur = str.length;
+
+
+				sort(str, 0, str.length - 1);
+
+				int longueure = removeDuplicateElements_int(str, longueur);
+
+				ArrayList<Integer> tab_wo_duplicate = new ArrayList<Integer>(longueure);
+				for (int i = 0; i < longueure; i++) {
+					tab_wo_duplicate.add(str[i]);
+
+				}
+				
+				results.put(s,tab_wo_duplicate);
+				
+			}
+			
+		}
+		
+		
+		return  results;
+	}
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		LoadData RData = new LoadData("src/dataset_sorted/dataset_sorted_100.csv", 100);

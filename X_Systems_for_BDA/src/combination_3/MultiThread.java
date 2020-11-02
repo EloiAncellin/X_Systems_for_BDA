@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import combination.Combination;
 import utils.BasicHashSet;
 import utils.MilanMultiKeyBinarySearchMultiThread;
+import utils.MultiThreadProjection;
 import utils.MultiThreadProjectionSort;
 import utils.Projection;
 
@@ -15,6 +16,7 @@ public class MultiThread extends Combination {
 	private int nbThreads = 4;
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 	private Projection prj;
+	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 	public MultiThread(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
 			int nbThreads) {
 		super(filename, lenFile, distinct, keys,colnames,nbThreads);
@@ -50,7 +52,7 @@ public class MultiThread extends Combination {
 
 		// ***** PROJECTION ***** //
 		
-	 	System.out.println("th " + super.getNbThreads());
+	 //	System.out.println("th " + super.getNbThreads());
 		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
 		MultiThreadProjectionSort myPMT[] = new MultiThreadProjectionSort[super.getNbThreads()];
 		part = 0;
@@ -68,11 +70,12 @@ public class MultiThread extends Combination {
 			myThreads[j].join();
 		
 		}
-		
-		
+		projection = myPMT[getNbThreads()-1].getprojection();
+		System.out.println(projection);
 		
 	//	getProjection();
 		System.out.println("Projection  :"+System.nanoTime());
+
 
 		// ***** AGGREGATION ***** //
 	}
@@ -80,26 +83,5 @@ public class MultiThread extends Combination {
 	public void addSelection(ArrayList<Integer> selection) {
 		this.selection.addAll(selection);
 	}
-	/*
 	
-	public void getProjection() {
-		if(super.getDistinct()) {
-		Hashtable<String, BasicHashSet> result;
-		result = prj.getMTProjectionDistinct();
-		for (String s : super.getColnames()) {
-			System.out.println(result.get(s).toList());
-			projection.put(s,result.get(s).toList());
-			}
-		}
-		else {
-			for (String s : super.getColnames()) {
-				projection.put(s,new ArrayList<>(super.getLoadData().GetColumns().get(s).values()));
-				System.out.println(projection.get(s));
-				}
-		  
-		}
-		
-
-	}
-*/
 }

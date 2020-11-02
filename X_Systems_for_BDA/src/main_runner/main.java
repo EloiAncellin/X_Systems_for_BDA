@@ -2,7 +2,7 @@ package main_runner;
 
 
 import combination_3.SingleThread;
-import combination_1.MultiThread;
+import combination_3.MultiThread;
 public class main {
 
 	public static void main(String[] args) throws InterruptedException {
@@ -13,7 +13,7 @@ public class main {
 
 	//	SingleThread st = new SingleThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);		
 	//	st.start_combination();
-		MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
+	MultiThread mt = new MultiThread("src/dataset_sorted/dataset_sorted_100.csv", 100, true,keys,colnames,nbThreads);
 		mt.start_combination();
 
 		
