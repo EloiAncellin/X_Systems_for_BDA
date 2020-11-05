@@ -28,9 +28,6 @@ public class MultiThreadC2 extends Combination {
 		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
-	// SELECTION : Milan Multi Key Binary Search
-	// PROJECTION :
-	// AGGREGATION :
 	public void start_combination(Mesures mesure) throws InterruptedException {
 
 
