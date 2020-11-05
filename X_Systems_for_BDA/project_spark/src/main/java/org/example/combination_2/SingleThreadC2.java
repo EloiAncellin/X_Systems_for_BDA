@@ -21,9 +21,6 @@ public class SingleThreadC2 extends Combination {
 		super(filename, lenFile, distinct, keys, colnames, nbThreads);
 	}
 
-	// SELECTION : Milan Multi Key Binary Search
-	// PROJECTION :
-	// AGGREGATION :
 	public void start_combination(Mesures mesure) {
 
 		getLoadData().read();
@@ -63,7 +60,7 @@ public class SingleThreadC2 extends Combination {
 		long aggregationStart = System.nanoTime();
 		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier Ã  probleme de type*/
 		for(String s : ageListString) ageList.add(Integer.valueOf(s));
 		//System.out.println(ageList);
 		//System.out.println(ageList.get(0));
