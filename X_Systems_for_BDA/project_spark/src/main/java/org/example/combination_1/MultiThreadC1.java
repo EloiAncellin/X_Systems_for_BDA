@@ -15,6 +15,8 @@ import utils.Max;
 import utils.MinMultiThread;
 import utils.MaxMultiThread;
 import utils.Mesures;
+import org.apache.spark.api.java.JavaSparkContext;
+
 
 public class MultiThreadC1 extends Combination {
 	private int part = 0;
@@ -22,9 +24,10 @@ public class MultiThreadC1 extends Combination {
 	Hashtable<String, ArrayList<?>> projection = new Hashtable<>();
 	private Projection prj;
 
+
 	public MultiThreadC1(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
-			int nbThreads) {
-		super(filename, lenFile, distinct, keys, colnames, nbThreads);
+			int nbThreads, JavaSparkContext sc) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads, sc);
 	}
 
 	// SELECTION : Multi Key Binary Search
@@ -35,8 +38,7 @@ public class MultiThreadC1 extends Combination {
 		getLoadData().read();
 
 		// ***** SELECTION ***** //
-		
-		
+
 		BinarySearchMultiThread myBSMT[] = new BinarySearchMultiThread[super.getNbThreads()];
 		Thread myThreads[] = new Thread[super.getNbThreads()];
 		long selectionStart = System.nanoTime();
@@ -62,7 +64,7 @@ public class MultiThreadC1 extends Combination {
 //		System.out.println("MultiThreadC1, Time for selection : " + selectionTime);
 		mesure.addSelection(selectionTime);
 		// ***** PROJECTION ***** //
-		
+
 		
 		this.prj = new Projection(super.getLoadData().GetColumns(), super.getLoadData().GetColumnsName());
 		MultiThreadProjection myPMT[] = new MultiThreadProjection[super.getNbThreads()];

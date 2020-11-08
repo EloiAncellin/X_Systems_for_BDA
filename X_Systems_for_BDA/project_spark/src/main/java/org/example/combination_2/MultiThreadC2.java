@@ -14,6 +14,8 @@ import utils.MinMultiThread;
 import utils.MultiThreadProjection;
 import utils.Projection;
 import utils.Mesures;
+import org.apache.spark.api.java.JavaSparkContext;
+
 
 public class MultiThreadC2 extends Combination {
 
@@ -24,10 +26,13 @@ public class MultiThreadC2 extends Combination {
 	private Projection prj;
 
 	public MultiThreadC2(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
-			int nbThreads) {
-		super(filename, lenFile, distinct, keys, colnames, nbThreads);
+			int nbThreads, JavaSparkContext sc) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads, sc);
 	}
 
+	// SELECTION : Milan Multi Key Binary Search
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination(Mesures mesure) throws InterruptedException {
 
 

@@ -11,14 +11,17 @@ import utils.Mean;
 import utils.Min;
 import utils.Max;
 import utils.Mesures;
+import utils.Rdd;
+import org.apache.spark.api.java.JavaSparkContext;
+
 
 
 public class SingleThreadC1 extends Combination {
 	private ArrayList<Integer> selection = new ArrayList<Integer>();
 	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
-	public SingleThreadC1(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads) {
-		super(filename, lenFile, distinct, keys,colnames,nbThreads);
+	public SingleThreadC1(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,int nbThreads, JavaSparkContext sc) {
+		super(filename, lenFile, distinct, keys,colnames,nbThreads, sc);
 	}
 
 	// SELECTION : Multi Key Binary Search
@@ -58,15 +61,24 @@ public class SingleThreadC1 extends Combination {
 
 		// ***** AGGREGATION ***** //
 		long aggregationStart = System.nanoTime();
-		
+
+
 		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier ï¿½ probleme de type*/
 		for(String s : ageListString) ageList.add(Integer.valueOf(s));
 		System.out.println(ageList);
 		System.out.println(ageList.get(0));
+
 		Mean meanObject = new Mean(ageList, sizeArray);
 		double mean = meanObject.mean();
+
+		Rdd rddavg = new Rdd(ageList, sizeArray, super.getSc());
+		double avge = rddavg.avgMapReduce();
+
+		System.out.println("Average with mapReduce rdd: "+ avge);
+		System.out.println("Mean with classic methods: "+ mean);
+
 		Min minObject = new Min(ageList, sizeArray);
 		int min = minObject.minOrdered();
 		Max maxObject = new Max(ageList, sizeArray);

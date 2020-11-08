@@ -37,6 +37,7 @@ public class LoadData {
 		Columns.put("ProductPrice", ProductPrice);
 		Columns.put("PurchaseId", PurchaseId);
 
+
 	}
 
 	public void read() {

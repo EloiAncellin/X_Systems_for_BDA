@@ -10,6 +10,8 @@ import utils.MilanMultiKeyBinarySearch;
 import utils.Min;
 import utils.Projection;
 import utils.Mesures;
+import org.apache.spark.api.java.JavaSparkContext;
+
 
 public class SingleThreadC2 extends Combination {
 
@@ -17,10 +19,13 @@ public class SingleThreadC2 extends Combination {
 	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
 	public SingleThreadC2(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
-			int nbThreads) {
-		super(filename, lenFile, distinct, keys, colnames, nbThreads);
+			int nbThreads, JavaSparkContext sc) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads, sc);
 	}
 
+	// SELECTION : Milan Multi Key Binary Search
+	// PROJECTION :
+	// AGGREGATION :
 	public void start_combination(Mesures mesure) {
 
 		getLoadData().read();
@@ -60,7 +65,7 @@ public class SingleThreadC2 extends Combination {
 		long aggregationStart = System.nanoTime();
 		ArrayList<String> ageListString = (ArrayList<String>)projection.get("CustomerAge");
 		int sizeArray = ageListString.size();
-		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier à probleme de type*/
+		ArrayList<Integer> ageList = new ArrayList<Integer>(sizeArray); /*Pour palier � probleme de type*/
 		for(String s : ageListString) ageList.add(Integer.valueOf(s));
 		//System.out.println(ageList);
 		//System.out.println(ageList.get(0));
