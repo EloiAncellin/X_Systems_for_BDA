@@ -10,6 +10,7 @@ import utils.MilanMultiKeyBinarySearch;
 import utils.Min;
 import utils.Projection;
 import utils.Mesures;
+import org.apache.spark.api.java.JavaSparkContext;
 
 
 public class SingleThreadC3 extends Combination{
@@ -19,8 +20,8 @@ public class SingleThreadC3 extends Combination{
 	private Hashtable<String, ArrayList<?>> projection = new Hashtable<String, ArrayList<?>>(); 
 
 	public SingleThreadC3(String filename, int lenFile, Boolean distinct, double[] keys, String[] colnames,
-			int nbThreads) {
-		super(filename, lenFile, distinct, keys, colnames, nbThreads);
+			int nbThreads, JavaSparkContext sc) {
+		super(filename, lenFile, distinct, keys, colnames, nbThreads, sc);
 	}
 
 	// SELECTION : Milan Multi Key Binary Search

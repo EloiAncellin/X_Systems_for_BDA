@@ -8,8 +8,6 @@ import java.io.*;
 import utils.Mesures;
 
 
-
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.VoidFunction;
@@ -33,7 +31,7 @@ public class App {
             try(JavaSparkContext context = new JavaSparkContext(session.sparkContext())) {
 
 				int lenFile = 1000;
-				int numberIteration = 1000;
+				int numberIteration = 1;
 				double[] keys;
 				if (lenFile == 100) {
 					keys = new double[] { 111.46, 3001.37 };
@@ -57,7 +55,7 @@ public class App {
 				for (int i=0;i<numberIteration;i++){
 					
 					//long TimeSingleC1Start = System.nanoTime();
-					SingleThreadC1 stc1 = new SingleThreadC1(filename, lenFile, true, keys, colnames, nbThreads);
+					SingleThreadC1 stc1 = new SingleThreadC1(filename, lenFile, true, keys, colnames, nbThreads, context);
 					stc1.start_combination(mesureST1);	
 				}
 				System.out.println("ST1 selection : " + mesureST1.getAverageSelection());
@@ -67,7 +65,7 @@ public class App {
 
 				Mesures mesureMT1 = new Mesures(numberIteration);
 				for (int i=0;i<numberIteration;i++){
-					MultiThreadC1 mtc1 = new MultiThreadC1(filename, lenFile, true, keys, colnames, nbThreads);
+					MultiThreadC1 mtc1 = new MultiThreadC1(filename, lenFile, true, keys, colnames, nbThreads, context);
 		    		mtc1.start_combination(mesureMT1);
 		    	}
 		    	System.out.println("MT1 selection : " + mesureMT1.getAverageSelection());
@@ -77,7 +75,7 @@ public class App {
 				
 				Mesures mesureST2 = new Mesures(numberIteration);
 				for (int i=0;i<numberIteration;i++){
-					SingleThreadC2 stc2 = new SingleThreadC2(filename, lenFile, true, keys, colnames, nbThreads);
+					SingleThreadC2 stc2 = new SingleThreadC2(filename, lenFile, true, keys, colnames, nbThreads, context);
 					stc2.start_combination(mesureST2);
 				}
 				System.out.println("ST2 selection : " + mesureST2.getAverageSelection());
@@ -87,7 +85,7 @@ public class App {
 
 				Mesures mesureMT2 = new Mesures(numberIteration);
 				for (int i=0;i<numberIteration;i++){
-					MultiThreadC2 mtc2 = new MultiThreadC2(filename, lenFile, true, keys, colnames, nbThreads);
+					MultiThreadC2 mtc2 = new MultiThreadC2(filename, lenFile, true, keys, colnames, nbThreads, context);
 					mtc2.start_combination(mesureMT2);
 				}
 				System.out.println("MT2 selection : " + mesureMT2.getAverageSelection());
@@ -97,7 +95,7 @@ public class App {
 
 				Mesures mesureST3 = new Mesures(numberIteration);
 				for (int i=0;i<numberIteration;i++){
-					SingleThreadC3 stc3 = new SingleThreadC3(filename, lenFile, true, keys, colnames, nbThreads);
+					SingleThreadC3 stc3 = new SingleThreadC3(filename, lenFile, true, keys, colnames, nbThreads, context);
 					stc3.start_combination(mesureST3);
 				}
 				System.out.println("ST3 selection : " + mesureST3.getAverageSelection());
@@ -107,7 +105,7 @@ public class App {
 
 				Mesures mesureMT3 = new Mesures(numberIteration);
 				for (int i=0;i<numberIteration;i++){
-					MultiThreadC3 mtc3 = new MultiThreadC3(filename, lenFile, true, keys, colnames, nbThreads);
+					MultiThreadC3 mtc3 = new MultiThreadC3(filename, lenFile, true, keys, colnames, nbThreads, context);
 					mtc3.start_combination(mesureMT3);
 				}	
 				System.out.println("MT3 selection : " + mesureMT3.getAverageSelection());
